@@ -9,7 +9,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_17
 group = "dev.gregorius.library"
-version = "0.0.1-SNAPSHOT"
+version = "0.1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
