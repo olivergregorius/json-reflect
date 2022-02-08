@@ -34,12 +34,21 @@ public class ApiResponse {
     /**
      * Asserts the HTTP status code to equal the expected value.
      *
-     * @param expectedStatusCode  the expected status code value
+     * @param expectedStatusCode the expected status code value
      * @return this {@link ApiResponse} instance
      */
     public ApiResponse httpStatusCodeIs(final Integer expectedStatusCode) {
         assertEqual("status code", responseEntity.getStatusCodeValue(), expectedStatusCode);
 
         return this;
+    }
+
+    /**
+     * Returns the response body.
+     *
+     * @return the response body as {@link String}
+     */
+    public String getResponseBody() {
+        return responseEntity.getBody();
     }
 }

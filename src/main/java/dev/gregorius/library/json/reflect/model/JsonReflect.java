@@ -1,9 +1,9 @@
 package dev.gregorius.library.json.reflect.model;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -27,14 +27,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Slf4j
 public class JsonReflect {
 
-    private JsonReflect() {}
+    private static final String JSON_NULL = "null";
+
+    private JsonReflect() {
+    }
 
     private static RestTemplate restTemplate = buildRestTemplate(StringUtils.EMPTY);
 
     /**
      * Sets the base URL for endpoints/resources to be tested.
      *
-     * @param baseUrl  the base URL, usually the hostname of the test system
+     * @param baseUrl the base URL, usually the hostname of the test system
      */
     public static void setBaseUrl(final String baseUrl) {
         restTemplate = buildRestTemplate(baseUrl);
@@ -43,7 +46,7 @@ public class JsonReflect {
     /**
      * Defines the endpoint to be called.
      *
-     * @param path  the endpoint path
+     * @param path the endpoint path
      * @return {@link ApiRequest instance} carrying all request information
      */
     public static ApiRequest endpoint(final String path) {
@@ -53,7 +56,7 @@ public class JsonReflect {
     /**
      * Alias method for {@link #endpoint(String)}.
      *
-     * @param path  the resource path
+     * @param path the resource path
      * @return {@link ApiRequest instance} carrying all request information
      */
     public static ApiRequest resource(final String path) {
@@ -84,7 +87,12 @@ public class JsonReflect {
 
             final ClientHttpResponse response = execution.execute(request, requestBody);
             try {
-                log.info("Request body:\n{}", GSON.toJson(JsonParser.parseString(new String(requestBody, UTF_8))));
+                final String requestBodyJson = GSON.toJson(JsonParser.parseString(new String(requestBody, UTF_8)));
+                if (StringUtils.isNotEmpty(requestBodyJson) && !StringUtils.equals(requestBodyJson, JSON_NULL)) {
+                    log.info("Request body:\n{}", requestBodyJson);
+                } else {
+                    log.info("No request body");
+                }
 
                 // Call response.getStatusCode() first to ensure that in case an error was returned the errorStream is populated with the error data and to avoid an
                 // IOException being thrown when calling response.getBody() (https://stackoverflow.com/a/47689313/10355617)
@@ -92,8 +100,13 @@ public class JsonReflect {
 
                 final InputStreamReader responseReader = new InputStreamReader(response.getBody(), UTF_8);
                 responseBody = new BufferedReader(responseReader).lines().collect(Collectors.joining("\n"));
-                log.info("Response body:\n{}", GSON.toJson(JsonParser.parseString(responseBody)));
-            } catch (final JsonParseException e) {
+                final String responseBodyJson = GSON.toJson(JsonParser.parseString(responseBody));
+                if (StringUtils.isNotEmpty(responseBodyJson) && !StringUtils.equals(responseBodyJson, JSON_NULL)) {
+                    log.info("Response body:\n{}", responseBodyJson);
+                } else {
+                    log.info("No response body");
+                }
+            } catch (final JsonSyntaxException e) {
                 log.error("Error during logging of request/response body. May not be valid Json.", e);
                 log.info("Request body:\n{}", new String(requestBody, UTF_8));
                 log.info("Response body:\n{}", responseBody);

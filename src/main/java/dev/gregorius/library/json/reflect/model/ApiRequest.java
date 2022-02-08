@@ -3,6 +3,7 @@ package dev.gregorius.library.json.reflect.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -18,10 +19,10 @@ public class ApiRequest {
     private final String path;
     private final MultiValueMap<String, String> headers;
     private final Map<String, String> parameters;
-    private String contentType;
+    private String contentType = MediaType.TEXT_PLAIN.toString();
     private String body;
 
-    ApiRequest(final RestTemplate restTemplate, final String path) {
+    public ApiRequest(final RestTemplate restTemplate, final String path) {
         this.restTemplate = restTemplate;
         this.path = path;
         this.headers = CollectionUtils.toMultiValueMap(new HashMap<>());
@@ -58,8 +59,8 @@ public class ApiRequest {
     /**
      * Adds a header to the request.
      *
-     * @param key  the header key
-     * @param value  the header value
+     * @param key   the header key
+     * @param value the header value
      * @return this {@link ApiRequest} instance
      */
     public ApiRequest header(final String key, final String value) {
@@ -71,8 +72,8 @@ public class ApiRequest {
     /**
      * Adds a request parameter.
      *
-     * @param key  the request parameter key
-     * @param value  the request parameter value
+     * @param key   the request parameter key
+     * @param value the request parameter value
      * @return this {@link ApiRequest} instance
      */
     public ApiRequest parameter(final String key, final String value) {
@@ -83,8 +84,10 @@ public class ApiRequest {
 
     /**
      * Defines the value of the Content-Type header.
+     * <p>
+     * If no method setting the Content-Type header is called the default value is "text/plain".
      *
-     * @param contentType  the value of the Content-Type header
+     * @param contentType the value of the Content-Type header
      * @return this {@link ApiRequest} instance
      */
     public ApiRequest contentType(final String contentType) {
@@ -94,9 +97,22 @@ public class ApiRequest {
     }
 
     /**
+     * Explicitly omits the Content-Type header.
+     * <p>
+     * If no method setting the Content-Type header is called the default value is "text/plain".
+     *
+     * @return this {@link ApiRequest} instance
+     */
+    public ApiRequest noContentType() {
+        this.contentType = null;
+
+        return this;
+    }
+
+    /**
      * Sets the request body.
      *
-     * @param body  the value of the request body
+     * @param body the value of the request body
      * @return this {@link ApiRequest} instance
      */
     public ApiRequest body(final String body) {
@@ -106,11 +122,11 @@ public class ApiRequest {
     }
 
     /**
-     * Generates the full request URL.
+     * Generates the full request path with appended query parameters.
      *
-     * @return The request URL with all request parameters as {@link String}
+     * @return The request path with all request parameters as {@link String}
      */
-    String getRequestUrl() {
+    String getPathWithQueryParameters() {
         if (CollectionUtils.isEmpty(parameters)) {
             return path;
         }

@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 
 @RequiredArgsConstructor
 public class ApiClient {
@@ -60,14 +58,12 @@ public class ApiClient {
     private ApiResponse execute(final HttpMethod httpMethod) {
         final HttpHeaders requestHeaders = new HttpHeaders(request.getHeaders());
 
-        if (StringUtils.hasText(request.getContentType())) {
+        if (request.getContentType() != null) {
             requestHeaders.add(HttpHeaders.CONTENT_TYPE, request.getContentType());
-        } else {
-            requestHeaders.setContentType(MediaType.TEXT_PLAIN);
         }
 
         final HttpEntity<String> requestEntity = new HttpEntity<>(request.getBody(), requestHeaders);
 
-        return new ApiResponse(request.getRestTemplate().exchange(request.getRequestUrl(), httpMethod, requestEntity, String.class));
+        return new ApiResponse(request.getRestTemplate().exchange(request.getPathWithQueryParameters(), httpMethod, requestEntity, String.class));
     }
 }
