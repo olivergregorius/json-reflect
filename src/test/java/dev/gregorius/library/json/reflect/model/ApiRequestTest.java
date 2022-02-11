@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApiRequestTest extends BaseTest {
+class ApiRequestTest extends BaseTest {
 
     @Test
     void given_headersSet_when_performingApiCall_then_requestContainsHeaders() {

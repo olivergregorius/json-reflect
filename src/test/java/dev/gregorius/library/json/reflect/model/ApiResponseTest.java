@@ -4,17 +4,20 @@ import dev.gregorius.library.json.reflect.JsonReflect;
 import dev.gregorius.library.json.reflect.setup.BaseTest;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ApiResponseTest extends BaseTest {
+class ApiResponseTest extends BaseTest {
 
     @Test
     void when_callingGetReturning200_then_httpStatusCodeIs200ShouldBeHappy() {
-        JsonReflect.endpoint("/get-returning-200")
-            .when()
-            .get()
-            .then()
-            .httpStatusCodeIs(200);
+        assertDoesNotThrow(
+            () -> JsonReflect.endpoint("/get-returning-200")
+                .when()
+                .get()
+                .then()
+                .httpStatusCodeIs(200)
+        );
     }
 
     @Test
@@ -24,6 +27,7 @@ public class ApiResponseTest extends BaseTest {
                 .when()
                 .get()
                 .then()
-                .httpStatusCodeIs(404));
+                .httpStatusCodeIs(404)
+        );
     }
 }

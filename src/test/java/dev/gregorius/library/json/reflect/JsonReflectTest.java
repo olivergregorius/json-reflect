@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonReflectTest extends BaseTest {
+class JsonReflectTest extends BaseTest {
 
     @Test
     void given_validJsonBodySet_when_performingApiCallReturningBody_then_requestBodyAndStatusCodeAndResponseBodyAreLogged() {
