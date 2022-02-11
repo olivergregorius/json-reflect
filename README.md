@@ -1,5 +1,6 @@
 # JSON REFlecT
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/olivergregorius/json-reflect/Gradle%20Build?label=Gradle%20Build&logo=github)](https://github.com/olivergregorius/json-reflect/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=olivergregorius_json-reflect&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=olivergregorius_json-reflect)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=olivergregorius_json-reflect&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=olivergregorius_json-reflect)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=olivergregorius_json-reflect&metric=coverage)](https://sonarcloud.io/summary/new_code?id=olivergregorius_json-reflect)
