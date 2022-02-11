@@ -1,5 +1,6 @@
 package dev.gregorius.library.json.reflect.model;
 
+import dev.gregorius.library.json.reflect.JsonReflect;
 import dev.gregorius.library.json.reflect.setup.BaseTest;
 import org.junit.jupiter.api.Test;
 

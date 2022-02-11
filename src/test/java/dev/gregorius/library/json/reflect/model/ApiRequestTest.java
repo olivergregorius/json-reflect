@@ -2,6 +2,7 @@ package dev.gregorius.library.json.reflect.model;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.gregorius.library.json.reflect.JsonReflect;
 import dev.gregorius.library.json.reflect.setup.BaseTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -125,7 +126,7 @@ public class ApiRequestTest extends BaseTest {
                 }
             }
             """;
-        final String responseBody = JsonReflect.endpoint("/get-reflecting-body")
+        final String responseBody = JsonReflect.endpoint("/post-reflecting-body")
             .given()
             .body(requestBody)
             .when()
@@ -138,7 +139,7 @@ public class ApiRequestTest extends BaseTest {
 
     @Test
     void given_bodyNotSet_when_performingApiCall_then_requestDoesNotContainBody() {
-        final String responseBody = JsonReflect.endpoint("/get-reflecting-body")
+        final String responseBody = JsonReflect.endpoint("/post-reflecting-body")
             .when()
             .post()
             .then()
@@ -149,20 +150,20 @@ public class ApiRequestTest extends BaseTest {
 
     @Test
     void given_parametersSet_when_getPathWithQueryParameters_then_queryParametersAppendedToPath() {
-        final String requestUrl = JsonReflect.endpoint("/get-reflecting-body")
+        final String requestUrl = JsonReflect.endpoint("/post-reflecting-body")
             .given()
             .parameter("key1", "value1")
             .parameter("key2", "value2")
             .getPathWithQueryParameters();
 
-        assertThat(requestUrl).isEqualTo("/get-reflecting-body?key1=value1&key2=value2");
+        assertThat(requestUrl).isEqualTo("/post-reflecting-body?key1=value1&key2=value2");
     }
 
     @Test
     void given_noParameters_when_getPathWithQueryParameters_then_pathOnly() {
-        final String requestUrl = JsonReflect.endpoint("/get-reflecting-body")
+        final String requestUrl = JsonReflect.endpoint("/post-reflecting-body")
             .getPathWithQueryParameters();
 
-        assertThat(requestUrl).isEqualTo("/get-reflecting-body");
+        assertThat(requestUrl).isEqualTo("/post-reflecting-body");
     }
 }

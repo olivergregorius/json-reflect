@@ -1,9 +1,10 @@
-package dev.gregorius.library.json.reflect.model;
+package dev.gregorius.library.json.reflect;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import dev.gregorius.library.json.reflect.model.ApiRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -28,6 +29,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class JsonReflect {
 
     private static final String JSON_NULL = "null";
+    private static final String NO_REQUEST_BODY_LOGMSG = "No request body";
+    private static final String NO_RESPONSE_BODY_LOGMSG = "No response body";
 
     private JsonReflect() {
     }
@@ -91,7 +94,7 @@ public class JsonReflect {
                 if (StringUtils.isNotEmpty(requestBodyJson) && !StringUtils.equals(requestBodyJson, JSON_NULL)) {
                     log.info("Request body:\n{}", requestBodyJson);
                 } else {
-                    log.info("No request body");
+                    log.info(NO_REQUEST_BODY_LOGMSG);
                 }
 
                 // Call response.getStatusCode() first to ensure that in case an error was returned the errorStream is populated with the error data and to avoid an
@@ -104,12 +107,21 @@ public class JsonReflect {
                 if (StringUtils.isNotEmpty(responseBodyJson) && !StringUtils.equals(responseBodyJson, JSON_NULL)) {
                     log.info("Response body:\n{}", responseBodyJson);
                 } else {
-                    log.info("No response body");
+                    log.info(NO_RESPONSE_BODY_LOGMSG);
                 }
             } catch (final JsonSyntaxException e) {
                 log.error("Error during logging of request/response body. May not be valid Json.", e);
-                log.info("Request body:\n{}", new String(requestBody, UTF_8));
-                log.info("Response body:\n{}", responseBody);
+                final String requestBodyString = new String(requestBody, UTF_8);
+                if (StringUtils.isNotEmpty(requestBodyString) && !StringUtils.equals(requestBodyString, JSON_NULL)) {
+                    log.info("Request body:\n{}", requestBodyString);
+                } else {
+                    log.info(NO_REQUEST_BODY_LOGMSG);
+                }
+                if (StringUtils.isNotEmpty(responseBody) && !StringUtils.equals(responseBody, JSON_NULL)) {
+                    log.info("Response body:\n{}", responseBody);
+                } else {
+                    log.info(NO_RESPONSE_BODY_LOGMSG);
+                }
             }
 
             return response;

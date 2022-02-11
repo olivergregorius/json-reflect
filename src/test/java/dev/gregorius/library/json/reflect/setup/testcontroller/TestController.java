@@ -30,14 +30,23 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.OK).body(GSON.toJson(parameters));
     }
 
-    @PostMapping(path = "/get-reflecting-body")
-    public ResponseEntity<String> getReflectingBody(@RequestBody(required = false) final String body) {
+    @PostMapping(path = "/post-reflecting-body")
+    public ResponseEntity<String> postReflectingBody(@RequestBody(required = false) final String body) {
 
         return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 
     @GetMapping(path = "/get-returning-200")
     public ResponseEntity<String> getReturning200() {
-        return ResponseEntity.status(HttpStatus.OK).body("{}");
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping(path = "/get-returning-invalid-json")
+    public ResponseEntity<String> getReturningInvalidJson() {
+        final String responseBody = """
+            {
+                "data": "val1"
+            """;
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }
