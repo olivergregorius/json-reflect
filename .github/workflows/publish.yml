@@ -35,14 +35,17 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Gradle Build
-        run: ./gradlew build sonarqube -PreleaseVersion=$GITHUB_REF_NAME --info
+        run: ./gradlew build sonarqube --info
         env:
+          ORG_GRADLE_PROJECT_tagName: ${{ github.ref_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Gradle Publish to Sonatype Nexus - Maven Central
-        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -PreleaseVersion=$GITHUB_REF_NAME --info
+        run: ./gradlew releaseToMavenCentral --info
         env:
+          ORG_GRADLE_PROJECT_ci: true
+          ORG_GRADLE_PROJECT_tagName: ${{ github.ref_name }}
           ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_KEY }}

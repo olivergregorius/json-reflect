@@ -15,7 +15,7 @@ def snapshotVersion = "0.1.0-SNAPSHOT"
 
 sourceCompatibility = JavaVersion.VERSION_17
 group = "dev.gregorius.library"
-version = project.hasProperty("releaseVersion") ? releaseVersion.replaceAll("^v", "") : snapshotVersion
+version = project.hasProperty("tagName") ? tagName.replaceAll("^v", "") : snapshotVersion
 
 repositories {
     mavenCentral()
@@ -65,7 +65,7 @@ test {
 }
 
 jacocoTestReport {
-    dependsOn test
+    dependsOn("test")
     reports {
         html.required = true
         xml.required = true
@@ -138,5 +138,35 @@ signing {
 javadoc {
     if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
+    }
+}
+
+tasks.register("releaseCheck") {
+    def semanticVersionPattern = ~/^\d+\.\d+\.\d+$/
+    doFirst {
+        // Check if release is performed in the pipeline
+        if (!project.hasProperty("ci") || !ci) {
+            throw new InvalidUserDataException("Release must be performed in the pipeline!")
+        }
+
+        // Check if the provided version complies with semantic versioning
+        if (!semanticVersionPattern.matcher(project.version).matches()) {
+            throw new InvalidUserDataException("Provided version does not comply with semantic versioning!")
+        }
+    }
+}
+
+tasks.register("releaseToMavenCentral") {
+    dependsOn("releaseCheck")
+    dependsOn("publishToSonatype")
+    dependsOn("closeAndReleaseSonatypeStagingRepository")
+}
+
+afterEvaluate {
+    tasks.named("publishToSonatype") {
+        mustRunAfter("releaseCheck")
+    }
+    tasks.named("closeAndReleaseSonatypeStagingRepository") {
+        mustRunAfter("publishToSonatype")
     }
 }
