@@ -24,9 +24,9 @@ public class FuzzyMatchingUtil {
             return Optional.empty();
         }
 
-        final String potentialFuzzyString = (String) value;
+        final String potentialFuzzyTag = (String) value;
         return FUZZY_MATCHERS.stream()
-            .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equals(potentialFuzzyString))
+            .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equals(potentialFuzzyTag))
             .findFirst();
     }
 }
