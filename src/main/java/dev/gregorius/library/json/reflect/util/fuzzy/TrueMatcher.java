@@ -4,6 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Predicate;
 
+/**
+ * Pseudo-matcher, always returning true for every value to be matched.
+ */
 public class TrueMatcher implements FuzzyMatcher {
 
     @Override

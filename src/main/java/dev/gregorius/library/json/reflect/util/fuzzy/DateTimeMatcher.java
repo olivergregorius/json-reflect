@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class DateTimeMatcher extends DateTimeFuzzyMatcher {
+
     @Override
     protected List<DateTimeFormatter> getDateTimeFormatters() {
         return List.of(

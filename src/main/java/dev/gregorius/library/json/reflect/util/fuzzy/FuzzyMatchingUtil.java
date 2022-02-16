@@ -19,6 +19,12 @@ public class FuzzyMatchingUtil {
         new UUIDMatcher()
     );
 
+    /**
+     * Returns the determined FuzzyMatcher for the given value.
+     *
+     * @param value the value for which the FuzzyMatcher lookup will be performed
+     * @return {@link Optional} containing the {@link FuzzyMatcher} if the lookup was successful, {@link Optional#empty()} otherwise
+     */
     public static Optional<FuzzyMatcher> getFuzzyMatcher(final Object value) {
         if (!new StringMatcher().matches(value)) {
             return Optional.empty();

@@ -3,6 +3,7 @@ package dev.gregorius.library.json.reflect.util.fuzzy;
 import java.util.function.Predicate;
 
 public class NullMatcher implements FuzzyMatcher {
+
     @Override
     public String getFuzzyTag() {
         return "#null";
