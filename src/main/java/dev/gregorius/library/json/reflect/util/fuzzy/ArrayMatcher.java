@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 
 import java.util.function.Predicate;
 
-public class ArrayMatcher extends FuzzyMatcher {
+public class ArrayMatcher implements FuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

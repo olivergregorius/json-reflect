@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Predicate;
 
-public class TrueMatcher extends FuzzyMatcher {
+public class TrueMatcher implements FuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

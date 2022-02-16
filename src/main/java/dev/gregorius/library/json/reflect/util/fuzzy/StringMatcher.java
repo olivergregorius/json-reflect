@@ -2,7 +2,7 @@ package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import java.util.function.Predicate;
 
-public class StringMatcher extends FuzzyMatcher {
+public class StringMatcher implements FuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

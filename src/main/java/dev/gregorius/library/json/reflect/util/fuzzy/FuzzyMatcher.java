@@ -2,13 +2,13 @@ package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import java.util.function.Predicate;
 
-public abstract class FuzzyMatcher {
+public interface FuzzyMatcher {
 
-    public abstract String getFuzzyTag();
+    String getFuzzyTag();
 
-    public abstract Predicate<Object> getPredicate();
+    Predicate<Object> getPredicate();
 
-    public final boolean matches(final Object object) {
+    default boolean matches(final Object object) {
         return getPredicate().test(object);
     }
 }

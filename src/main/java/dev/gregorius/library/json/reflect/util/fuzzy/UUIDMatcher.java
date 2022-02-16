@@ -3,7 +3,7 @@ package dev.gregorius.library.json.reflect.util.fuzzy;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class UUIDMatcher extends FuzzyMatcher {
+public class UUIDMatcher implements FuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {
