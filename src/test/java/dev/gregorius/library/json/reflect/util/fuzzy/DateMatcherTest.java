@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 
-public class DateMatcherTest extends FuzzyMatcherTest {
+class DateMatcherTest extends FuzzyMatcherTest {
 
     @Override
     protected FuzzyMatcher fuzzyMatcherUnderTest() {

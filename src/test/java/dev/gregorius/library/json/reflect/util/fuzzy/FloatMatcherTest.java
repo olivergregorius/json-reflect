@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 
-public class FloatMatcherTest extends FuzzyMatcherTest {
+class FloatMatcherTest extends FuzzyMatcherTest {
 
     @Override
     protected FuzzyMatcher fuzzyMatcherUnderTest() {
@@ -19,7 +19,7 @@ public class FloatMatcherTest extends FuzzyMatcherTest {
     @Override
     protected List<Arguments> matchingArguments() {
         return List.of(
-            Arguments.of(10.4),
+            Arguments.of(10.4f),
             Arguments.of(10.12345),
             Arguments.of(-123.12),
             Arguments.of(Double.MAX_VALUE)

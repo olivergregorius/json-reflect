@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 
-public class ObjectMatcherTest extends FuzzyMatcherTest {
+class ObjectMatcherTest extends FuzzyMatcherTest {
 
     @Override
     protected FuzzyMatcher fuzzyMatcherUnderTest() {

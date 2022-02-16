@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FuzzyMatchingUtilTest {
+class FuzzyMatchingUtilTest {
 
     @Test
     void given_nonStringValue_when_getFuzzyMatcher_then_noFuzzyMatcherIsReturned() {

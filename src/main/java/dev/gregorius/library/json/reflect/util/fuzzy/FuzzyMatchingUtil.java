@@ -5,6 +5,9 @@ import java.util.Optional;
 
 public class FuzzyMatchingUtil {
 
+    private FuzzyMatchingUtil() {
+    }
+
     private static final List<FuzzyMatcher> FUZZY_MATCHERS = List.of(
         new ArrayMatcher(),
         new BooleanMatcher(),

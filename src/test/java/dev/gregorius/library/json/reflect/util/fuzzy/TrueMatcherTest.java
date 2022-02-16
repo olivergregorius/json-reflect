@@ -1,25 +1,39 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-abstract class FuzzyMatcherTest {
+public class TrueMatcherTest {
 
-    protected abstract FuzzyMatcher fuzzyMatcherUnderTest();
+    protected FuzzyMatcher fuzzyMatcherUnderTest() {
+        return new TrueMatcher();
+    }
 
-    protected abstract String expectedFuzzyTag();
+    protected String expectedFuzzyTag() {
+        return StringUtils.EMPTY;
+    }
 
-    protected abstract List<Arguments> matchingArguments();
-
-    protected abstract List<Arguments> nonMatchingArguments();
+    protected static List<Arguments> matchingArguments() {
+        return List.of(
+            Arguments.of(1),
+            Arguments.of("String"),
+            Arguments.of(true),
+            Arguments.of(new JsonObject()),
+            Arguments.of(new JsonArray()),
+            Arguments.of(10.0f),
+            Arguments.of(UUID.randomUUID())
+        );
+    }
 
     @Test
     void when_getFuzzyIdentifier_then_expectedIdentifierIsReturned() {
@@ -30,11 +44,5 @@ abstract class FuzzyMatcherTest {
     @MethodSource("matchingArguments")
     void given_JsonArray_when_matches_then_returnTrue(final Object value) {
         assertThat(fuzzyMatcherUnderTest().matches(value)).isTrue();
-    }
-
-    @ParameterizedTest
-    @MethodSource("nonMatchingArguments")
-    void given_JsonObject_when_matches_then_returnFalse(final Object value) {
-        assertThat(fuzzyMatcherUnderTest().matches(value)).isFalse();
     }
 }
