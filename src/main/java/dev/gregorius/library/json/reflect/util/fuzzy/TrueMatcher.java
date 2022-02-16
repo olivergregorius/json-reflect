@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * Pseudo-matcher, always returning true for every value to be matched.
  */
-class TrueMatcher implements FuzzyMatcher {
+public class TrueMatcher implements FuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

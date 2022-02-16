@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TrueMatcherTest {
+class TrueMatcherTest {
 
     protected FuzzyMatcher fuzzyMatcherUnderTest() {
         return new TrueMatcher();
