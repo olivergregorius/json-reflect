@@ -124,7 +124,7 @@ public class ApiRequest {
     /**
      * Generates the full request path with appended query parameters.
      *
-     * @return The request path with all request parameters as {@link String}
+     * @return the request path with all request parameters as {@link String}
      */
     String getPathWithQueryParameters() {
         if (CollectionUtils.isEmpty(parameters)) {
@@ -140,7 +140,7 @@ public class ApiRequest {
     /**
      * Marks the request as ready for transmission - initiating the "when"-part.
      *
-     * @return A new {@link ApiClient} instance for performing the API call
+     * @return a new {@link ApiClient} instance for performing the API call
      */
     public ApiClient when() {
         return new ApiClient(this);

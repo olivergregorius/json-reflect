@@ -22,7 +22,7 @@ public interface FuzzyMatcher {
      * Performs fuzzy match for the given value.
      *
      * @param object the value to be fuzzy matched
-     * @return true if the value matched, false otherwise
+     * @return {@code true} if the value matched and {@code false} otherwise
      */
     default boolean matches(final Object object) {
         return getPredicate().test(object);
