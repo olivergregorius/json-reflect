@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatchingUtil;
 import dev.gregorius.library.json.reflect.util.fuzzy.NullMatcher;
-import dev.gregorius.library.json.reflect.util.fuzzy.StringMatcher;
 import org.hamcrest.Matcher;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +23,6 @@ public class AssertionUtil {
     }
 
     private static final NullMatcher NULL_MATCHER = new NullMatcher();
-    private static final StringMatcher STRING_MATCHER = new StringMatcher();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /**
