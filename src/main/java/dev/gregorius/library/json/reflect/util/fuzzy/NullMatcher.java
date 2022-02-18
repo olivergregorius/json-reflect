@@ -13,6 +13,6 @@ public class NullMatcher implements FuzzyMatcher {
 
     @Override
     public Predicate<Object> getPredicate() {
-        return value -> value == null || value instanceof JsonNull;
+        return value -> value == null || value instanceof JsonNull || (new StringMatcher().matches(value) && value.toString().equalsIgnoreCase("null"));
     }
 }
