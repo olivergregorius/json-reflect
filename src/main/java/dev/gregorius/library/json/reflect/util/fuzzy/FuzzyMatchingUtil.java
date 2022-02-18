@@ -1,5 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonElement;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +27,15 @@ public class FuzzyMatchingUtil {
     /**
      * Returns the determined FuzzyMatcher for the given value.
      *
-     * @param value the value for which the FuzzyMatcher lookup will be performed
+     * @param jsonElement the value for which the FuzzyMatcher lookup will be performed
      * @return {@link Optional} containing the {@link FuzzyMatcher} if the lookup was successful and {@link Optional#empty()} otherwise
      */
-    public static Optional<FuzzyMatcher> getFuzzyMatcher(final Object value) {
-        if (!new StringMatcher().matches(value)) {
+    public static Optional<FuzzyMatcher> getFuzzyMatcher(final JsonElement jsonElement) {
+        if (!jsonElement.isJsonPrimitive()) {
             return Optional.empty();
         }
 
-        final String potentialFuzzyTag = (String) value;
+        final String potentialFuzzyTag = jsonElement.getAsString();
         return FUZZY_MATCHERS.stream()
             .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equals(potentialFuzzyTag))
             .findFirst();
