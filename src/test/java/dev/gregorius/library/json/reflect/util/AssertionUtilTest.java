@@ -111,7 +111,7 @@ class AssertionUtilTest {
             }
             """;
 
-    private static Stream<Arguments> NOT_EQUAL_JSON_OBJECTS() {
+    private static Stream<Arguments> notEqualJsonObjects() {
         return Stream.of(
             Arguments.of("One JSONObject is null", null, ONE_OBJECT, "Expected JSON objects '' to be equal.\nActual  : null\nExpected: " + ONE_OBJECT),
             Arguments.of("Different objects size", ONE_OBJECT, TWO_OBJECTS, "Expected JSON objects '' to be equal.\nActual  : " + ONE_OBJECT + "Expected: " + TWO_OBJECTS),
@@ -124,7 +124,7 @@ class AssertionUtilTest {
         );
     }
 
-    private static Stream<Arguments> EQUAL_JSON_OBJECTS() {
+    private static Stream<Arguments> equalJsonObjects() {
         return Stream.of(
             Arguments.of(STRING_OBJECT, STRING_OBJECT),
             Arguments.of(STRING_OBJECT, TYPE_STRING_OBJECT)
@@ -174,7 +174,7 @@ class AssertionUtilTest {
             ]
             """;
 
-    private static Stream<Arguments> NOT_EQUAL_JSON_ARRAYS() {
+    private static Stream<Arguments> notEqualJsonArrays() {
         return Stream.of(
             Arguments.of("One JSONArray is null", null, TWO_ITEMS_ARRAY, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : null\nExpected: [\n  1,\n  2\n]\n"),
             Arguments.of("Different arrays size", TWO_ITEMS_ARRAY, THREE_ITEMS_ARRAY, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : [\n  1,\n  2\n]\nExpected: [\n  1,\n  2,\n  3\n]\n"),
@@ -197,7 +197,7 @@ class AssertionUtilTest {
     }
 
     @ParameterizedTest
-    @MethodSource("NOT_EQUAL_JSON_OBJECTS")
+    @MethodSource("notEqualJsonObjects")
     void given_NotEqualJsonObjects_when_assertEqualJsonObjects_then_AssertionErrorIsThrown(final String description, final String object,
                                                                                            final String anotherObject, final String errorMessage) {
         final JsonObject jsonObject = object != null ? JsonParser.parseString(object).getAsJsonObject() : null;
@@ -215,7 +215,7 @@ class AssertionUtilTest {
     }
 
     @ParameterizedTest
-    @MethodSource("EQUAL_JSON_OBJECTS")
+    @MethodSource("equalJsonObjects")
     void given_EqualJSONObjects_when_assertEqualJsonObjects_then_NoAssertionErrorIsThrown(final String object, final String anotherObject) {
         final JsonObject jsonObject = object != null ? JsonParser.parseString(object).getAsJsonObject() : null;
         final JsonObject anotherJsonObject = anotherObject != null ? JsonParser.parseString(anotherObject).getAsJsonObject() : null;
@@ -224,7 +224,7 @@ class AssertionUtilTest {
     }
 
     @ParameterizedTest
-    @MethodSource("NOT_EQUAL_JSON_ARRAYS")
+    @MethodSource("notEqualJsonArrays")
     void given_NotEqualJsonArrays_when_assertEqualJsonArrays_then_AssertionErrorIsThrown(final String description, final String array,
                                                                                          final String anotherArray, final String errorMessage) {
         final JsonArray jsonArray = array != null ? JsonParser.parseString(array).getAsJsonArray() : null;
