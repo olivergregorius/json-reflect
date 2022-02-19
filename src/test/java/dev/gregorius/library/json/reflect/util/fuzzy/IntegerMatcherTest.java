@@ -1,5 +1,6 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -34,7 +35,8 @@ class IntegerMatcherTest extends FuzzyMatcherTest {
             Arguments.of(new JsonPrimitive(10.12345)),
             Arguments.of(new JsonPrimitive(-123.12)),
             Arguments.of(new JsonPrimitive("10")),
-            Arguments.of(new JsonPrimitive(true))
+            Arguments.of(new JsonPrimitive(true)),
+            Arguments.of(new JsonObject())
         );
     }
 }
