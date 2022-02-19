@@ -1,9 +1,9 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TrueMatcherTest {
 
+    private static final Gson GSON = new Gson();
+
     protected FuzzyMatcher fuzzyMatcherUnderTest() {
         return new TrueMatcher();
     }
@@ -27,13 +29,13 @@ class TrueMatcherTest {
 
     protected static List<Arguments> matchingArguments() {
         return List.of(
-            Arguments.of(new JsonPrimitive(1)),
-            Arguments.of(new JsonPrimitive("String")),
-            Arguments.of(new JsonPrimitive(true)),
+            Arguments.of(1),
+            Arguments.of("String"),
+            Arguments.of(true),
             Arguments.of(new JsonObject()),
             Arguments.of(new JsonArray()),
-            Arguments.of(new JsonPrimitive(10.0f)),
-            Arguments.of(new JsonPrimitive(UUID.randomUUID().toString()))
+            Arguments.of(10.0f),
+            Arguments.of(UUID.randomUUID().toString())
         );
     }
 
@@ -44,7 +46,8 @@ class TrueMatcherTest {
 
     @ParameterizedTest
     @MethodSource("matchingArguments")
-    void given_JsonArray_when_matches_then_returnTrue(final JsonElement value) {
-        assertThat(fuzzyMatcherUnderTest().matches(value)).isTrue();
+    void given_JsonArray_when_matches_then_returnTrue(final Object value) {
+        final JsonElement jsonElement = GSON.toJsonTree(value);
+        assertThat(fuzzyMatcherUnderTest().matches(jsonElement)).isTrue();
     }
 }

@@ -1,5 +1,6 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -13,6 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 abstract class FuzzyMatcherTest {
+
+    private static final Gson GSON = new Gson();
 
     protected abstract FuzzyMatcher fuzzyMatcherUnderTest();
 
@@ -29,13 +32,15 @@ abstract class FuzzyMatcherTest {
 
     @ParameterizedTest
     @MethodSource("matchingArguments")
-    void given_matchingArgument_when_matches_then_returnTrue(final JsonElement value) {
-        assertThat(fuzzyMatcherUnderTest().matches(value)).isTrue();
+    void given_matchingArgument_when_matches_then_returnTrue(final Object value) {
+        final JsonElement jsonElement = GSON.toJsonTree(value);
+        assertThat(fuzzyMatcherUnderTest().matches(jsonElement)).isTrue();
     }
 
     @ParameterizedTest
     @MethodSource("nonMatchingArguments")
-    void given_nonMatchingArgument_when_matches_then_returnFalse(final JsonElement value) {
-        assertThat(fuzzyMatcherUnderTest().matches(value)).isFalse();
+    void given_nonMatchingArgument_when_matches_then_returnFalse(final Object value) {
+        final JsonElement jsonElement = GSON.toJsonTree(value);
+        assertThat(fuzzyMatcherUnderTest().matches(jsonElement)).isFalse();
     }
 }

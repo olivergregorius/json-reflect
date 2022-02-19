@@ -2,7 +2,6 @@ package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
@@ -30,7 +29,8 @@ class ArrayMatcherTest extends FuzzyMatcherTest {
     protected List<Arguments> nonMatchingArguments() {
         return List.of(
             Arguments.of(new JsonObject()),
-            Arguments.of(new JsonPrimitive("[]"))
+            Arguments.of("{}"),
+            Arguments.of("[]")
         );
     }
 }
