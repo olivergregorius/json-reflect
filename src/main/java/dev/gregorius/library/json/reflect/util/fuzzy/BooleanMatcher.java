@@ -1,5 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonElement;
+
 import java.util.function.Predicate;
 
 public class BooleanMatcher implements FuzzyMatcher {
@@ -10,7 +12,7 @@ public class BooleanMatcher implements FuzzyMatcher {
     }
 
     @Override
-    public Predicate<Object> getPredicate() {
-        return Boolean.class::isInstance;
+    public Predicate<JsonElement> getPredicate() {
+        return jsonElement -> jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isBoolean();
     }
 }

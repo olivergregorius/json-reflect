@@ -1,5 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonElement;
+
 import java.util.function.Predicate;
 
 public interface FuzzyMatcher {
@@ -16,15 +18,15 @@ public interface FuzzyMatcher {
      *
      * @return the matching-{@link Predicate} of the matcher
      */
-    Predicate<Object> getPredicate();
+    Predicate<JsonElement> getPredicate();
 
     /**
      * Performs fuzzy match for the given value.
      *
-     * @param object the value to be fuzzy matched
+     * @param jsonElement the value to be fuzzy matched
      * @return {@code true} if the value matched and {@code false} otherwise
      */
-    default boolean matches(final Object object) {
-        return getPredicate().test(object);
+    default boolean matches(final JsonElement jsonElement) {
+        return getPredicate().test(jsonElement);
     }
 }

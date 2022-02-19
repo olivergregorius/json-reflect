@@ -1,5 +1,6 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonElement;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Predicate;
@@ -15,7 +16,7 @@ public class TrueMatcher implements FuzzyMatcher {
     }
 
     @Override
-    public Predicate<Object> getPredicate() {
+    public Predicate<JsonElement> getPredicate() {
         return value -> true;
     }
 }

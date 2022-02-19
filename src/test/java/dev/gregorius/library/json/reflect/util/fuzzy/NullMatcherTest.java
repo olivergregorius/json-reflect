@@ -1,6 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import com.google.gson.JsonNull;
+import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
@@ -21,18 +22,18 @@ class NullMatcherTest extends FuzzyMatcherTest {
     protected List<Arguments> matchingArguments() {
         return List.of(
             Arguments.of(null, ""), // added another dummy value for fulfilling the precondition check
-            Arguments.of(JsonNull.INSTANCE),
-            Arguments.of("null"),
-            Arguments.of("NuLl")
+            Arguments.of(JsonNull.INSTANCE)
         );
     }
 
     @Override
     protected List<Arguments> nonMatchingArguments() {
         return List.of(
-            Arguments.of(0),
-            Arguments.of("anyString"),
-            Arguments.of(false)
+            Arguments.of(new JsonPrimitive(0)),
+            Arguments.of(new JsonPrimitive("anyString")),
+            Arguments.of(new JsonPrimitive(false)),
+            Arguments.of(new JsonPrimitive("null")),
+            Arguments.of(new JsonPrimitive("NuLl"))
         );
     }
 }

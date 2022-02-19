@@ -42,7 +42,7 @@ public class AssertionUtil {
         }
     }
 
-    private static <T> void assertIsOfType(final String fieldPath, final T actualValue, final FuzzyMatcher fuzzyMatcher) {
+    private static void assertIsOfType(final String fieldPath, final JsonElement actualValue, final FuzzyMatcher fuzzyMatcher) {
         if (!fuzzyMatcher.matches(actualValue)) {
             final String errorMessage = String.format("Expected '%s' to be of type %s.%nActual value: %s%n", fieldPath,
                 StringUtils.trimLeadingCharacter(fuzzyMatcher.getFuzzyTag(), '#'), GSON.toJson(actualValue));

@@ -1,6 +1,6 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
-import com.google.gson.JsonNull;
+import com.google.gson.JsonElement;
 
 import java.util.function.Predicate;
 
@@ -12,7 +12,7 @@ public class NullMatcher implements FuzzyMatcher {
     }
 
     @Override
-    public Predicate<Object> getPredicate() {
-        return value -> value == null || value instanceof JsonNull || (new StringMatcher().matches(value) && value.toString().equalsIgnoreCase("null"));
+    public Predicate<JsonElement> getPredicate() {
+        return value -> value == null || value.isJsonNull();
     }
 }

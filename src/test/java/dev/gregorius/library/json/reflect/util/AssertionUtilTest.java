@@ -216,9 +216,9 @@ class AssertionUtilTest {
 
     @ParameterizedTest
     @MethodSource("EQUAL_JSON_OBJECTS")
-    void given_EqualJSONObjects_when_assertEqualJsonObjects_then_NoAssertionErrorIsThrown() {
-        final JsonObject jsonObject = JsonParser.parseString(STRING_OBJECT).getAsJsonObject();
-        final JsonObject anotherJsonObject = JsonParser.parseString(STRING_OBJECT).getAsJsonObject();
+    void given_EqualJSONObjects_when_assertEqualJsonObjects_then_NoAssertionErrorIsThrown(final String object, final String anotherObject) {
+        final JsonObject jsonObject = object != null ? JsonParser.parseString(object).getAsJsonObject() : null;
+        final JsonObject anotherJsonObject = anotherObject != null ? JsonParser.parseString(anotherObject).getAsJsonObject() : null;
 
         assertDoesNotThrow(() -> AssertionUtil.assertEqualJsonObjects("", jsonObject, anotherJsonObject));
     }

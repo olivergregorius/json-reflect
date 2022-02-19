@@ -1,5 +1,6 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
@@ -19,20 +20,20 @@ class BooleanMatcherTest extends FuzzyMatcherTest {
     @Override
     protected List<Arguments> matchingArguments() {
         return List.of(
-            Arguments.of(true),
-            Arguments.of(false),
-            Arguments.of(Boolean.TRUE),
-            Arguments.of(Boolean.FALSE)
+            Arguments.of(new JsonPrimitive(true)),
+            Arguments.of(new JsonPrimitive(false)),
+            Arguments.of(new JsonPrimitive(Boolean.TRUE)),
+            Arguments.of(new JsonPrimitive(Boolean.FALSE))
         );
     }
 
     @Override
     protected List<Arguments> nonMatchingArguments() {
         return List.of(
-            Arguments.of("true"),
-            Arguments.of("False"),
-            Arguments.of(0),
-            Arguments.of(1)
+            Arguments.of(new JsonPrimitive("true")),
+            Arguments.of(new JsonPrimitive("False")),
+            Arguments.of(new JsonPrimitive(0)),
+            Arguments.of(new JsonPrimitive(1))
         );
     }
 }

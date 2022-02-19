@@ -1,5 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
+import com.google.gson.JsonElement;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,7 +23,7 @@ public class DateMatcher extends DateTimeFuzzyMatcher {
     }
 
     @Override
-    public Predicate<Object> getPredicate() {
+    public Predicate<JsonElement> getPredicate() {
         return this::dateTimeFormattersMatch;
     }
 }
