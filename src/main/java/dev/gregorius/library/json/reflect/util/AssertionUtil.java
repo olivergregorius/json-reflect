@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatchingUtil;
 import dev.gregorius.library.json.reflect.util.fuzzy.NullMatcher;
+import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matcher;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class AssertionUtil {
     private static void assertIsOfType(final String fieldPath, final JsonElement actualValue, final FuzzyMatcher fuzzyMatcher) {
         if (!fuzzyMatcher.matches(actualValue)) {
             final String errorMessage = String.format("Expected '%s' to be of type %s.%nActual value: %s%n", fieldPath,
-                StringUtils.trimLeadingCharacter(fuzzyMatcher.getFuzzyTag(), '#'), GSON.toJson(actualValue));
+                StringUtils.stripStart(fuzzyMatcher.getFuzzyTag(), "#"), GSON.toJson(actualValue));
             throw new AssertionError(errorMessage);
         }
     }
@@ -86,7 +86,7 @@ public class AssertionUtil {
         // Traverse objects key by key. We do not need to check further if the values differ for which an AssertionError is thrown.
         // If no AssertionError is thrown during iteration the objects are considered equal.
         for (final String expectedKey : expectedObject.keySet()) {
-            final String expectedKeyPath = StringUtils.trimLeadingCharacter(String.format("%s.%s", basePath, expectedKey), '.');
+            final String expectedKeyPath = StringUtils.stripStart(String.format("%s.%s", basePath, expectedKey), ".");
             if (!actualObject.has(expectedKey)) {
                 errorMessage = String.format("Expected JSON value '%s' to be present.", expectedKeyPath);
                 throw new AssertionError(errorMessage);
