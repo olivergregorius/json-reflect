@@ -15,16 +15,16 @@ public abstract class DateTimeFuzzyMatcher implements FuzzyMatcher {
             return false;
         }
 
-        // If at least one of the formats works, it returns false -> allMatch is false -> the method returns true
-        // If none of the formats work, all return true -> allMatch is true -> the method returns false
-        return !getDateTimeFormatters().stream().allMatch(dateTimeFormatter -> {
+        // If at least one of the formats works, it returns true -> anyMatch is true -> the method returns true
+        // If none of the formats work, all return false -> anyMatch is false -> the method returns false
+        return getDateTimeFormatters().stream().anyMatch(dateTimeFormatter -> {
             try {
                 dateTimeFormatter.parse(value.getAsString());
             } catch (final DateTimeParseException e) {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         });
     }
 }

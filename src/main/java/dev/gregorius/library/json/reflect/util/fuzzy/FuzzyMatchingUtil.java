@@ -31,7 +31,7 @@ public class FuzzyMatchingUtil {
      * @return {@link Optional} containing the {@link FuzzyMatcher} if the lookup was successful and {@link Optional#empty()} otherwise
      */
     public static Optional<FuzzyMatcher> getFuzzyMatcher(final JsonElement jsonElement) {
-        if (!jsonElement.isJsonPrimitive()) {
+        if (!new StringMatcher().matches(jsonElement)) {
             return Optional.empty();
         }
 
