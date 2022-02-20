@@ -13,7 +13,7 @@ public class ApiClient {
     /**
      * Performs a GET request against the defined request URL.
      *
-     * @return A new {@link ApiResponse} instance containing the request response
+     * @return a new {@link ApiResponse} instance containing the request response
      */
     public ApiResponse get() {
         return execute(HttpMethod.GET);
@@ -22,7 +22,7 @@ public class ApiClient {
     /**
      * Performs a POST request against the defined request URL.
      *
-     * @return A new {@link ApiResponse} instance containing the request response
+     * @return a new {@link ApiResponse} instance containing the request response
      */
     public ApiResponse post() {
         return execute(HttpMethod.POST);
@@ -31,7 +31,7 @@ public class ApiClient {
     /**
      * Performs a PUT request against the defined request URL.
      *
-     * @return A new {@link ApiResponse} instance containing the request response
+     * @return a new {@link ApiResponse} instance containing the request response
      */
     public ApiResponse put() {
         return execute(HttpMethod.PUT);
@@ -40,7 +40,7 @@ public class ApiClient {
     /**
      * Performs a DELETE request against the defined request URL.
      *
-     * @return A new {@link ApiResponse} instance containing the request response
+     * @return a new {@link ApiResponse} instance containing the request response
      */
     public ApiResponse delete() {
         return execute(HttpMethod.DELETE);
@@ -49,7 +49,7 @@ public class ApiClient {
     /**
      * Performs a PATCH request against the defined request URL.
      *
-     * @return A new {@link ApiResponse} instance containing the request response
+     * @return a new {@link ApiResponse} instance containing the request response
      */
     public ApiResponse patch() {
         return execute(HttpMethod.PATCH);
