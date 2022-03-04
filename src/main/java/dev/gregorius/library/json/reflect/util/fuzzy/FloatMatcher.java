@@ -18,7 +18,7 @@ public class FloatMatcher implements FuzzyMatcher {
                 return false;
             }
 
-            return value.getAsNumber() instanceof Float || value.getAsNumber() instanceof Double;
+            return value.getAsString().contains(".");
         };
     }
 }
