@@ -54,6 +54,16 @@ public class AssertionUtil {
         return (NULL_MATCHER.matches(actualValue) && !NULL_MATCHER.matches(expectedValue)) || (!NULL_MATCHER.matches(actualValue) && NULL_MATCHER.matches(expectedValue));
     }
 
+    /**
+     * Checks two JsonElement instances to be equal.
+     * <p>
+     * This method traverses the given JSON-documents to do a recursive check for equality. If the documents differ an {@link AssertionError} is thrown, if
+     * the documents are equal the method returns nothing.
+     *
+     * @param actualJsonElement   actual {@link JsonElement} instance to be checked
+     * @param expectedJsonElement expected {@link JsonElement} instance
+     * @throws AssertionError if the documents are not equal
+     */
     public static void assertEqualJsonElements(final JsonElement actualJsonElement, final JsonElement expectedJsonElement) throws AssertionError {
         final String errorMessage = String.format("Expected JSON documents to be equal.%nActual  : %s%nExpected: %s%n", GSON.toJson(actualJsonElement), GSON.toJson(expectedJsonElement));
 
