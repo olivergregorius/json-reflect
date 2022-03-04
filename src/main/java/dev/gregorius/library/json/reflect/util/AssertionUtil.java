@@ -54,6 +54,52 @@ public class AssertionUtil {
         return (NULL_MATCHER.matches(actualValue) && !NULL_MATCHER.matches(expectedValue)) || (!NULL_MATCHER.matches(actualValue) && NULL_MATCHER.matches(expectedValue));
     }
 
+    public static void assertEqualJsonElements(final JsonElement actualJsonElement, final JsonElement expectedJsonElement) throws AssertionError {
+        final String errorMessage = String.format("Expected JSON documents to be equal.%nActual  : %s%nExpected: %s%n", GSON.toJson(actualJsonElement), GSON.toJson(expectedJsonElement));
+
+        // Check if objects are equal (also true if both are null)
+        if (Objects.equals(actualJsonElement, expectedJsonElement)) {
+            return;
+        }
+
+        // Check if either of the objects is null
+        if (eitherValueIsNull(actualJsonElement, expectedJsonElement)) {
+            throw new AssertionError(errorMessage);
+        }
+
+        // JsonObject vs. JsonArray
+        if ((actualJsonElement.isJsonObject() && expectedJsonElement.isJsonArray()) || (actualJsonElement.isJsonArray() && expectedJsonElement.isJsonObject())) {
+            throw new AssertionError(errorMessage);
+        }
+
+        // JsonObject vs. JsonPrimitive
+        if ((actualJsonElement.isJsonObject() && expectedJsonElement.isJsonPrimitive()) || (actualJsonElement.isJsonPrimitive() && expectedJsonElement.isJsonObject())) {
+            throw new AssertionError(errorMessage);
+        }
+
+        // JsonArray vs. JsonPrimitive
+        if ((actualJsonElement.isJsonArray() && expectedJsonElement.isJsonPrimitive()) || (actualJsonElement.isJsonPrimitive() && expectedJsonElement.isJsonArray())) {
+            throw new AssertionError(errorMessage);
+        }
+
+        // JsonPrimitive vs. JsonPrimitive
+        if (actualJsonElement.isJsonPrimitive() && expectedJsonElement.isJsonPrimitive()) {
+            if (!actualJsonElement.equals(expectedJsonElement)) {
+                throw new AssertionError(errorMessage);
+            }
+        }
+
+        // JsonObject vs. JsonObject
+        if (actualJsonElement.isJsonObject() && expectedJsonElement.isJsonObject()) {
+            assertEqualJsonObjects(StringUtils.EMPTY, actualJsonElement.getAsJsonObject(), expectedJsonElement.getAsJsonObject());
+        }
+
+        // JsonArray vs. JsonArray
+        if (actualJsonElement.isJsonArray() && expectedJsonElement.isJsonArray()) {
+            assertEqualJsonArrays(StringUtils.EMPTY, actualJsonElement.getAsJsonArray(), expectedJsonElement.getAsJsonArray());
+        }
+    }
+
     /**
      * Checks two JsonObject instances to be equal.
      * <p>
@@ -67,16 +113,6 @@ public class AssertionUtil {
      */
     public static void assertEqualJsonObjects(final String basePath, final JsonObject actualObject, final JsonObject expectedObject) throws AssertionError {
         String errorMessage = String.format("Expected JSON objects '%s' to be equal.%nActual  : %s%nExpected: %s%n", basePath, GSON.toJson(actualObject), GSON.toJson(expectedObject));
-
-        // Check if objects are equal (also true if both are null)
-        if (Objects.equals(actualObject, expectedObject)) {
-            return;
-        }
-
-        // Check if either of the objects is null
-        if (eitherValueIsNull(actualObject, expectedObject)) {
-            throw new AssertionError(errorMessage);
-        }
 
         // Check if object sizes differ
         if (actualObject.size() != expectedObject.size()) {
@@ -136,16 +172,6 @@ public class AssertionUtil {
      */
     public static void assertEqualJsonArrays(final String basePath, final JsonArray actualArray, final JsonArray expectedArray) throws AssertionError {
         final String errorMessage = String.format("Expected JSON arrays '%s' to be equal.%nActual  : %s%nExpected: %s%n", basePath, GSON.toJson(actualArray), GSON.toJson(expectedArray));
-
-        // Check if arrays are equal (also true if both are null)
-        if (Objects.equals(actualArray, expectedArray)) {
-            return;
-        }
-
-        // Check if either of the arrays is null
-        if (eitherValueIsNull(actualArray, expectedArray)) {
-            throw new AssertionError(errorMessage);
-        }
 
         // Check if array sizes differ
         if (actualArray.size() != expectedArray.size()) {

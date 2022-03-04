@@ -1,6 +1,8 @@
 package dev.gregorius.library.json.reflect.util;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
@@ -130,27 +132,6 @@ class AssertionUtilTest {
             }
             """;
 
-    private static Stream<Arguments> notEqualJsonObjects() {
-        return Stream.of(
-            Arguments.of("One JSONObject is null", null, OBJECT_CONTAINING_OBJECT, "Expected JSON objects '' to be equal.\nActual  : null\nExpected: " + OBJECT_CONTAINING_OBJECT),
-            Arguments.of("Different objects size", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_TWO_OBJECTS, "Expected JSON objects '' to be equal.\nActual  : " + OBJECT_CONTAINING_OBJECT + "Expected: " + OBJECT_CONTAINING_TWO_OBJECTS),
-            Arguments.of("One traversed object does not exist", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_ANOTHER_OBJECT, "Expected JSON value 'anotherObject' to be present."),
-            Arguments.of("One traversed object is null", OBJECT_CONTAINING_NULL_OBJECT, OBJECT_CONTAINING_OBJECT, "Expected JSON values 'object' to be equal.\nActual  : null\nExpected: {}\n"),
-            Arguments.of("Not matching data type", OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_OBJECT_TYPE_OBJECT, "Expected 'object' to be of type object.\nActual value: \"This is a String\"\n"),
-            Arguments.of("Different nested objects", OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_ANOTHER_NESTED_OBJECT, "Expected JSON value 'object.anotherNestedObject' to be present."),
-            Arguments.of("Different nested arrays", OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_ANOTHER_ARRAY, "Expected JSON arrays 'array' to be equal.\nActual  : [\n  1,\n  2\n]\nExpected: [\n  \"one\",\n  \"two\"\n]\n"),
-            Arguments.of("Different values", OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_ANOTHER_STRING_OBJECT, "Expected JSON values 'object' to be equal.\nActual  : \"This is a String\"\nExpected: \"This is another String\"\n")
-        );
-    }
-
-    private static Stream<Arguments> equalJsonObjects() {
-        return Stream.of(
-            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_STRING_TYPE_OBJECT),
-            Arguments.of(OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT_TYPE_OBJECT),
-            Arguments.of(OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_INTERCHANGED_ARRAY)
-        );
-    }
-
     private static final String ARRAY_CONTAINING_TWO_ITEMS = "[1, 2]";
     private static final String ARRAY_CONTAINING_TWO_OTHER_ITEMS = "[1, 3]";
     private static final String ARRAY_CONTAINING_THREE_ITEMS = "[1, 2, 3]";
@@ -227,9 +208,49 @@ class AssertionUtilTest {
             ]
             """;
 
+    private static Stream<Arguments> notEqualJsonElements() {
+        return Stream.of(
+            Arguments.of("One JsonElement is null", null, OBJECT_CONTAINING_OBJECT, "Expected JSON documents to be equal.\nActual  : null\nExpected: " + OBJECT_CONTAINING_OBJECT),
+            Arguments.of("Mixed object and array", OBJECT_CONTAINING_OBJECT, ARRAY_CONTAINING_TWO_ITEMS, "Expected JSON documents to be equal.\nActual  : " + OBJECT_CONTAINING_OBJECT + "Expected: [\n  1,\n  2\n]\n"),
+            Arguments.of("Mixed JsonPrimitive and object", "String", OBJECT_CONTAINING_OBJECT, "Expected JSON documents to be equal.\nActual  : \"String\"\nExpected: " + OBJECT_CONTAINING_OBJECT),
+            Arguments.of("Mixed JsonPrimitive and array", "String", ARRAY_CONTAINING_TWO_ITEMS, "Expected JSON documents to be equal.\nActual  : \"String\"\nExpected: [\n  1,\n  2\n]\n"),
+            Arguments.of("Different JsonPrimitives", "String", "AnotherString", "Expected JSON documents to be equal.\nActual  : \"String\"\nExpected: \"AnotherString\"\n")
+        );
+    }
+
+    private static Stream<Arguments> equalJsonElements() {
+        return Stream.of(
+            Arguments.of(null, JsonNull.INSTANCE.toString()),
+            Arguments.of("String", "String"),
+            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_STRING_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_STRING_TYPE_OBJECT),
+            Arguments.of(ARRAY_CONTAINING_ARRAY, ARRAY_CONTAINING_INTERCHANGED_ARRAY)
+        );
+    }
+
+    private static Stream<Arguments> notEqualJsonObjects() {
+        return Stream.of(
+            Arguments.of("Different objects size", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_TWO_OBJECTS, "Expected JSON objects '' to be equal.\nActual  : " + OBJECT_CONTAINING_OBJECT + "Expected: " + OBJECT_CONTAINING_TWO_OBJECTS),
+            Arguments.of("One traversed object does not exist", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_ANOTHER_OBJECT, "Expected JSON value 'anotherObject' to be present."),
+            Arguments.of("One traversed object is null", OBJECT_CONTAINING_NULL_OBJECT, OBJECT_CONTAINING_OBJECT, "Expected JSON values 'object' to be equal.\nActual  : null\nExpected: {}\n"),
+            Arguments.of("Not matching data type", OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_OBJECT_TYPE_OBJECT, "Expected 'object' to be of type object.\nActual value: \"This is a String\"\n"),
+            Arguments.of("Different nested objects", OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_ANOTHER_NESTED_OBJECT, "Expected JSON value 'object.anotherNestedObject' to be present."),
+            Arguments.of("Different nested arrays", OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_ANOTHER_ARRAY, "Expected JSON arrays 'array' to be equal.\nActual  : [\n  1,\n  2\n]\nExpected: [\n  \"one\",\n  \"two\"\n]\n"),
+            Arguments.of("Different values", OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_ANOTHER_STRING_OBJECT, "Expected JSON values 'object' to be equal.\nActual  : \"This is a String\"\nExpected: \"This is another String\"\n")
+        );
+    }
+
+    private static Stream<Arguments> equalJsonObjects() {
+        return Stream.of(
+            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_STRING_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_STRING_TYPE_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT_TYPE_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_INTERCHANGED_ARRAY)
+        );
+    }
+
     private static Stream<Arguments> notEqualJsonArrays() {
         return Stream.of(
-            Arguments.of("One JSONArray is null", null, ARRAY_CONTAINING_TWO_ITEMS, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : null\nExpected: [\n  1,\n  2\n]\n"),
             Arguments.of("Different arrays size", ARRAY_CONTAINING_TWO_ITEMS, ARRAY_CONTAINING_THREE_ITEMS, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : [\n  1,\n  2\n]\nExpected: [\n  1,\n  2,\n  3\n]\n"),
             Arguments.of("Not matching value null", ARRAY_CONTAINING_NULL_ITEM, ARRAY_CONTAINING_TWO_ITEMS, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : [\n  1,\n  null\n]\nExpected: [\n  1,\n  2\n]\n"),
             Arguments.of("Not matching object", ARRAY_CONTAINING_OBJECT, ARRAY_CONTAINING_ANOTHER_OBJECT, "Expected JSON arrays 'arrayPath' to be equal.\nActual  : " + ARRAY_CONTAINING_OBJECT + "Expected: " + ARRAY_CONTAINING_ANOTHER_OBJECT),
@@ -240,25 +261,46 @@ class AssertionUtilTest {
 
     private static Stream<Arguments> equalJsonArrays() {
         return Stream.of(
+            Arguments.of(ARRAY_CONTAINING_TWO_ITEMS, ARRAY_CONTAINING_TWO_ITEMS),
             Arguments.of(ARRAY_CONTAINING_TWO_OBJECTS, INTERCHANGED_ARRAY_CONTAINING_TWO_OBJECTS),
             Arguments.of(ARRAY_CONTAINING_ARRAY, ARRAY_CONTAINING_INTERCHANGED_ARRAY)
         );
     }
 
     @Test
-    void given_NotEqualObjects_when_assertEqual_then_AssertionErrorIsThrown() {
+    void given_notEqualObjects_when_assertEqual_then_AssertionErrorIsThrown() {
         final Throwable exception = assertThrows(AssertionError.class, () -> AssertionUtil.assertEqual("data", "FirstString", "SecondString"));
         assertThat(exception.getMessage()).isEqualTo("Expected 'data' to be equal.\nActual  : \"FirstString\"\nExpected: \"SecondString\"\n");
     }
 
     @Test
-    void given_EqualObjects_when_assertEqual_then_NoAssertionErrorIsThrown() {
+    void given_equalObjects_when_assertEqual_then_noAssertionErrorIsThrown() {
         assertDoesNotThrow(() -> AssertionUtil.assertEqual("", "EqualString", "EqualString"));
     }
 
     @ParameterizedTest
+    @MethodSource("notEqualJsonElements")
+    void given_notEqualJsonElements_when_assertEqualJsonElements_then_AssertionErrorIsThrown(final String description, final String document,
+                                                                                             final String anotherDocument, final String errorMessage) {
+        final JsonElement jsonElement = document != null ? JsonParser.parseString(document) : null;
+        final JsonElement anotherJsonElement = anotherDocument != null ? JsonParser.parseString(anotherDocument) : null;
+
+        final Throwable exception = assertThrows(AssertionError.class, () -> AssertionUtil.assertEqualJsonElements(jsonElement, anotherJsonElement));
+        assertThat(exception.getMessage()).isEqualTo(errorMessage);
+    }
+
+    @ParameterizedTest
+    @MethodSource("equalJsonElements")
+    void given_equalJsonElements_when_assertEqualJsonElements_then_noAssertionErrorIsThrown(final String document, final String anotherDocument) {
+        final JsonElement jsonElement = document != null ? JsonParser.parseString(document) : null;
+        final JsonElement anotherJsonElement = document != null ? JsonParser.parseString(anotherDocument) : null;
+
+        assertDoesNotThrow(() -> AssertionUtil.assertEqualJsonElements(jsonElement, anotherJsonElement));
+    }
+
+    @ParameterizedTest
     @MethodSource("notEqualJsonObjects")
-    void given_NotEqualJsonObjects_when_assertEqualJsonObjects_then_AssertionErrorIsThrown(final String description, final String object,
+    void given_notEqualJsonObjects_when_assertEqualJsonObjects_then_AssertionErrorIsThrown(final String description, final String object,
                                                                                            final String anotherObject, final String errorMessage) {
         final JsonObject jsonObject = object != null ? JsonParser.parseString(object).getAsJsonObject() : null;
         final JsonObject anotherJsonObject = anotherObject != null ? JsonParser.parseString(anotherObject).getAsJsonObject() : null;
@@ -267,16 +309,9 @@ class AssertionUtilTest {
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
-    @Test
-    void given_SameJSONObjects_when_assertEqualJsonObjects_then_NoAssertionErrorIsThrown() {
-        final JsonObject jsonObject = JsonParser.parseString(OBJECT_CONTAINING_STRING_OBJECT).getAsJsonObject();
-
-        assertDoesNotThrow(() -> AssertionUtil.assertEqualJsonObjects("", jsonObject, jsonObject));
-    }
-
     @ParameterizedTest
     @MethodSource("equalJsonObjects")
-    void given_EqualJSONObjects_when_assertEqualJsonObjects_then_NoAssertionErrorIsThrown(final String object, final String anotherObject) {
+    void given_equalJsonObjects_when_assertEqualJsonObjects_then_noAssertionErrorIsThrown(final String object, final String anotherObject) {
         final JsonObject jsonObject = object != null ? JsonParser.parseString(object).getAsJsonObject() : null;
         final JsonObject anotherJsonObject = anotherObject != null ? JsonParser.parseString(anotherObject).getAsJsonObject() : null;
 
@@ -285,7 +320,7 @@ class AssertionUtilTest {
 
     @ParameterizedTest
     @MethodSource("notEqualJsonArrays")
-    void given_NotEqualJsonArrays_when_assertEqualJsonArrays_then_AssertionErrorIsThrown(final String description, final String array,
+    void given_notEqualJsonArrays_when_assertEqualJsonArrays_then_AssertionErrorIsThrown(final String description, final String array,
                                                                                          final String anotherArray, final String errorMessage) {
         final JsonArray jsonArray = array != null ? JsonParser.parseString(array).getAsJsonArray() : null;
         final JsonArray anotherJsonArray = anotherArray != null ? JsonParser.parseString(anotherArray).getAsJsonArray() : null;
@@ -294,16 +329,9 @@ class AssertionUtilTest {
         assertThat(exception.getMessage()).isEqualTo(errorMessage);
     }
 
-    @Test
-    void given_SameJSONArrays_when_assertEqualJsonArrays_then_NoAssertionErrorIsThrown() {
-        final JsonArray jsonArray = JsonParser.parseString(ARRAY_CONTAINING_TWO_ITEMS).getAsJsonArray();
-
-        assertDoesNotThrow(() -> AssertionUtil.assertEqualJsonArrays("", jsonArray, jsonArray));
-    }
-
     @ParameterizedTest
     @MethodSource("equalJsonArrays")
-    void given_EqualJSONArrays_when_assertEqualJsonArrays_then_NoAssertionErrorIsThrown(final String array, final String anotherArray) {
+    void given_equalJsonArrays_when_assertEqualJsonArrays_then_noAssertionErrorIsThrown(final String array, final String anotherArray) {
         final JsonArray jsonArray = JsonParser.parseString(array).getAsJsonArray();
         final JsonArray anotherJsonArray = JsonParser.parseString(anotherArray).getAsJsonArray();
 
