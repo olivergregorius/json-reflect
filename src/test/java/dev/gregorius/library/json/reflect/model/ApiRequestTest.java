@@ -20,7 +20,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -34,7 +35,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -51,7 +53,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -65,7 +68,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -81,7 +85,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -94,7 +99,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -109,7 +115,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .get()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
@@ -132,7 +139,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .post()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         assertThat(responseBody).isEqualTo(requestBody);
     }
@@ -143,7 +151,8 @@ class ApiRequestTest extends BaseTest {
             .when()
             .post()
             .then()
-            .getResponseBody();
+            .getResponseBody()
+            .getAsString();
 
         assertThat(responseBody).isNull();
     }
