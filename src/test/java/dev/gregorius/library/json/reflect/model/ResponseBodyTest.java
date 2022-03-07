@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ResponseBodyTest extends BaseTest {
+class ResponseBodyTest extends BaseTest {
 
     private static final String ACTUAL_JSON_DOCUMENT = """
         {

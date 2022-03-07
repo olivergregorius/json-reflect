@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ResponseBody {
 
-    final String responseBody;
+    final String content;
 
     /**
      * Syntactic sugar for improving readability.
@@ -25,11 +25,11 @@ public class ResponseBody {
      * @return the response body as {@link String}
      */
     public final String getAsString() {
-        return responseBody;
+        return content;
     }
 
     public final ResponseBody isEqualTo(final String expectedResponseBody) {
-        final JsonElement actualJsonElement = JsonParser.parseString(responseBody);
+        final JsonElement actualJsonElement = JsonParser.parseString(content);
         final JsonElement expectedJsonElement = JsonParser.parseString(expectedResponseBody);
 
         AssertionUtil.assertEqualJsonElements(actualJsonElement, expectedJsonElement);

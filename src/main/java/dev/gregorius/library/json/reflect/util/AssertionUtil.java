@@ -93,10 +93,8 @@ public class AssertionUtil {
         }
 
         // JsonPrimitive vs. JsonPrimitive
-        if (actualJsonElement.isJsonPrimitive() && expectedJsonElement.isJsonPrimitive()) {
-            if (!actualJsonElement.equals(expectedJsonElement)) {
-                throw new AssertionError(errorMessage);
-            }
+        if (actualJsonElement.isJsonPrimitive() && expectedJsonElement.isJsonPrimitive() && !actualJsonElement.equals(expectedJsonElement)) {
+            throw new AssertionError(errorMessage);
         }
 
         // JsonObject vs. JsonObject
