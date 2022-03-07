@@ -20,19 +20,19 @@ class NullMatcherTest extends FuzzyMatcherTest {
     @Override
     protected List<Arguments> matchingArguments() {
         return List.of(
-            Arguments.of(null, ""), // added another dummy value for fulfilling the precondition check
-            Arguments.of(JsonNull.INSTANCE)
+            Arguments.of("null"),
+            Arguments.of("NuLl"),
+            Arguments.of(JsonNull.INSTANCE.toString())
         );
     }
 
     @Override
     protected List<Arguments> nonMatchingArguments() {
         return List.of(
-            Arguments.of(0),
-            Arguments.of("anyString"),
-            Arguments.of(false),
-            Arguments.of("null"),
-            Arguments.of("NuLl")
+            Arguments.of("\"null\""),
+            Arguments.of("0"),
+            Arguments.of("\"anyString\""),
+            Arguments.of("false")
         );
     }
 }

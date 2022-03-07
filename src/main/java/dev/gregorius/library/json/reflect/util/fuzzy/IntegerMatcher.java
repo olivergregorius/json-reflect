@@ -18,7 +18,7 @@ public class IntegerMatcher implements FuzzyMatcher {
                 return false;
             }
 
-            return value.getAsNumber() instanceof Integer || value.getAsNumber() instanceof Long;
+            return !value.getAsString().contains(".");
         };
     }
 }
