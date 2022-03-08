@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ResponseBody {
 
-    final String content;
+    private final String content;
 
     /**
      * Syntactic sugar for improving readability.
@@ -28,12 +28,32 @@ public class ResponseBody {
         return content;
     }
 
-    public final ResponseBody isEqualTo(final String expectedResponseBody) {
-        final JsonElement actualJsonElement = JsonParser.parseString(content);
+    final JsonElement getAsJsonElement() {
+        return JsonParser.parseString(content);
+    }
+
+    /**
+     * Asserts the body content to equal the expected value.
+     *
+     * @param expectedResponseBody the expected value
+     * @return this {@link ResponseBody} instance
+     * @throws AssertionError if the body content is not equal to the expected value
+     */
+    public final ResponseBody isEqualTo(final String expectedResponseBody) throws AssertionError {
         final JsonElement expectedJsonElement = JsonParser.parseString(expectedResponseBody);
 
-        AssertionUtil.assertEqualJsonElements(actualJsonElement, expectedJsonElement);
+        AssertionUtil.assertEqualJsonElements(getAsJsonElement(), expectedJsonElement);
 
         return this;
+    }
+
+    /**
+     * Extracts the value specified by the given JSON path from the response body.
+     *
+     * @param jsonPath the JSON path of the value to be extracted
+     * @return a new {@link ResponseBodyField} instance containing the extracted value
+     */
+    public ResponseBodyField valueOf(final String jsonPath) {
+        return new ResponseBodyField(this, jsonPath);
     }
 }
