@@ -36,8 +36,9 @@ public class ApiResponse {
      *
      * @param expectedStatusCode the expected status code value
      * @return this {@link ApiResponse} instance
+     * @throws AssertionError if the HTTP status code does not match the expected value
      */
-    public ApiResponse httpStatusCodeIs(final Integer expectedStatusCode) {
+    public ApiResponse httpStatusCodeIs(final Integer expectedStatusCode) throws AssertionError {
         assertEqual("status code", responseEntity.getStatusCodeValue(), expectedStatusCode);
 
         return this;
