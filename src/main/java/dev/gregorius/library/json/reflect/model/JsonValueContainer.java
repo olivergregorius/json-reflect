@@ -1,10 +1,12 @@
 package dev.gregorius.library.json.reflect.model;
 
 import com.google.gson.JsonElement;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class JsonValueContainer {
 
+    @Getter
+    @Setter
     private JsonElement value;
 }
