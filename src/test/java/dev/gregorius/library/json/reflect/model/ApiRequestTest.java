@@ -175,4 +175,67 @@ class ApiRequestTest extends BaseTest {
 
         assertThat(requestUrl).isEqualTo("/post-reflecting-body");
     }
+
+    @Test
+    void given_basicAuthSet_when_performingApiCall_then_requestContainsAuthorizationHeader() {
+        final String responseBody = JsonReflect.endpoint("/get-reflecting-headers")
+            .given()
+            .authentication().basicAuth("testuser", "testpass")
+            .when()
+            .get()
+            .then()
+            .getResponseBody()
+            .getAsString();
+
+        final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
+
+        assertThat(actualJson.get("authorization").getAsString()).isEqualTo("Basic dGVzdHVzZXI6dGVzdHBhc3M=");
+    }
+
+    @Test
+    void given_bearerTokenAuthSet_when_performingApiCall_then_requestContainsAuthorizationHeader() {
+        final String responseBody = JsonReflect.endpoint("/get-reflecting-headers")
+            .given()
+            .authentication().bearerTokenAuth("bearerToken")
+            .when()
+            .get()
+            .then()
+            .getResponseBody()
+            .getAsString();
+
+        final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
+
+        assertThat(actualJson.get("authorization").getAsString()).isEqualTo("Bearer bearerToken");
+    }
+
+    @Test
+    void given_apiTokenAuthSet_when_performingApiCall_then_requestContainsAuthorizationHeader() {
+        final String responseBody = JsonReflect.endpoint("/get-reflecting-headers")
+            .given()
+            .authentication().apiTokenAuth("apiToken")
+            .when()
+            .get()
+            .then()
+            .getResponseBody()
+            .getAsString();
+
+        final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
+
+        assertThat(actualJson.get("authorization").getAsString()).isEqualTo("Apikey apiToken");
+    }
+
+    @Test
+    void given_noAuthSet_when_performingApiCall_then_requestContainsNoAuthorizationHeader() {
+        final String responseBody = JsonReflect.endpoint("/get-reflecting-headers")
+            .given()
+            .when()
+            .get()
+            .then()
+            .getResponseBody()
+            .getAsString();
+
+        final JsonObject actualJson = JsonParser.parseString(responseBody).getAsJsonObject();
+
+        assertThat(actualJson.get("authorization")).isNull();
+    }
 }

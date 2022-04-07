@@ -110,6 +110,15 @@ public class ApiRequest {
     }
 
     /**
+     * Adds an authentication option to the request.
+     *
+     * @return a new {@link AuthenticationMethod} instance
+     */
+    public AuthenticationMethod authentication() {
+        return new AuthenticationMethod(this);
+    }
+
+    /**
      * Sets the request body.
      *
      * @param body the value of the request body
