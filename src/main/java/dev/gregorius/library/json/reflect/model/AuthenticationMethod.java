@@ -1,7 +1,5 @@
 package dev.gregorius.library.json.reflect.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 
@@ -9,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @RequiredArgsConstructor
-@Getter(AccessLevel.PACKAGE)
 public class AuthenticationMethod {
 
     private final ApiRequest apiRequest;
