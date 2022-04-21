@@ -219,7 +219,7 @@ class JsonReflectTest {
                   }
                 }
                 """)
-            .valueOf(".data.id").assignTo(newCarIdValueContainer);
+            .valueOf("data.id").assignTo(newCarIdValueContainer);
     }
 }
 ```
