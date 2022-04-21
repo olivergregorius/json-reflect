@@ -50,10 +50,10 @@ public class ResponseBody {
     /**
      * Extracts the value specified by the given JSON path from the response body.
      *
-     * @param jsonPath the JSON path of the value to be extracted
+     * @param jmesPath the JMESPath expression of the value to be extracted
      * @return a new {@link ResponseBodyField} instance containing the extracted value
      */
-    public ResponseBodyField valueOf(final String jsonPath) {
-        return new ResponseBodyField(this, jsonPath);
+    public ResponseBodyField valueOf(final String jmesPath) {
+        return new ResponseBodyField(this, jmesPath);
     }
 }
