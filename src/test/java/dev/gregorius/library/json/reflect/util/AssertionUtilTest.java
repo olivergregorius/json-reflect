@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -265,17 +264,6 @@ class AssertionUtilTest {
             Arguments.of(ARRAY_CONTAINING_TWO_OBJECTS, INTERCHANGED_ARRAY_CONTAINING_TWO_OBJECTS),
             Arguments.of(ARRAY_CONTAINING_ARRAY, ARRAY_CONTAINING_INTERCHANGED_ARRAY)
         );
-    }
-
-    @Test
-    void given_notEqualObjects_when_assertEqual_then_AssertionErrorIsThrown() {
-        final Throwable exception = assertThrows(AssertionError.class, () -> AssertionUtil.assertEqual("data", "FirstString", "SecondString"));
-        assertThat(exception.getMessage()).isEqualTo("Expected 'data' to be equal.\nActual  : \"FirstString\"\nExpected: \"SecondString\"\n");
-    }
-
-    @Test
-    void given_equalObjects_when_assertEqual_then_noAssertionErrorIsThrown() {
-        assertDoesNotThrow(() -> AssertionUtil.assertEqual("", "EqualString", "EqualString"));
     }
 
     @ParameterizedTest

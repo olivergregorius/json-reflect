@@ -3,9 +3,10 @@ package dev.gregorius.library.json.reflect.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hamcrest.Matcher;
 import org.springframework.http.ResponseEntity;
 
-import static dev.gregorius.library.json.reflect.util.AssertionUtil.assertEqual;
+import static org.hamcrest.Matchers.equalTo;
 
 @RequiredArgsConstructor
 @Getter(AccessLevel.PACKAGE)
@@ -39,7 +40,11 @@ public class ApiResponse {
      * @throws AssertionError if the HTTP status code does not match the expected value
      */
     public ApiResponse httpStatusCodeIs(final Integer expectedStatusCode) throws AssertionError {
-        assertEqual("status code", responseEntity.getStatusCodeValue(), expectedStatusCode);
+        final Matcher<Integer> matcher = equalTo(expectedStatusCode);
+        if (!matcher.matches(responseEntity.getStatusCodeValue())) {
+            final String errorMessage = String.format("Expected 'status code' to be equal.%nActual  : %s%nExpected: %s%n", responseEntity.getStatusCodeValue(), expectedStatusCode);
+            throw new AssertionError(errorMessage);
+        }
 
         return this;
     }

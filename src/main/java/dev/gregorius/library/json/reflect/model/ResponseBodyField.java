@@ -1,50 +1,29 @@
 package dev.gregorius.library.json.reflect.model;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.gregorius.library.json.reflect.util.AssertionUtil;
-import org.apache.commons.lang3.StringUtils;
+import io.burt.jmespath.Expression;
+import io.burt.jmespath.JmesPath;
+import io.burt.jmespath.gson.GsonRuntime;
 
 public class ResponseBodyField {
 
     private final ResponseBody responseBody;
-    private final String jsonPath;
+    private final String jmesPath;
     private final JsonElement fieldValue;
 
-    ResponseBodyField(final ResponseBody responseBody, final String jsonPath) {
+    ResponseBodyField(final ResponseBody responseBody, final String jmesPath) {
         this.responseBody = responseBody;
-        this.jsonPath = jsonPath;
+        this.jmesPath = jmesPath;
         this.fieldValue = getFieldValue();
     }
 
     private JsonElement getFieldValue() {
+        final JmesPath<JsonElement> jmesPathRuntime = new GsonRuntime();
+        final Expression<JsonElement> expression = jmesPathRuntime.compile(jmesPath);
         final JsonElement responseBodyJsonElement = responseBody.getAsJsonElement();
-        JsonObject currentNode;
-        if (!responseBodyJsonElement.isJsonObject()) {
-            throw new IllegalArgumentException("Unable to traverse document as it is no JSON object");
-        } else {
-            currentNode = responseBodyJsonElement.getAsJsonObject();
-        }
-
-        final String[] pathNodes = StringUtils.split(jsonPath, '.');
-        for (int level = 0; level < pathNodes.length; level++) {
-            final String currentPathNode = pathNodes[level];
-            final boolean isLastPathNode = level == pathNodes.length - 1;
-
-            // Each traversed node in the JSON must be of Type JsonObject, instead of the last one which might be of any type
-            if (!isLastPathNode && !(currentNode.has(currentPathNode) && currentNode.get(currentPathNode).isJsonObject())) {
-                throw new IllegalArgumentException(String.format("The path '%s' is not valid", jsonPath));
-            }
-
-            if (isLastPathNode) {
-                return currentNode.get(currentPathNode);
-            }
-
-            currentNode = currentNode.getAsJsonObject(currentPathNode);
-        }
-
-        throw new IllegalArgumentException(String.format("The path '%s' is not valid", jsonPath));
+        return expression.search(responseBodyJsonElement);
     }
 
     /**
@@ -55,7 +34,7 @@ public class ResponseBodyField {
      * @throws AssertionError if the values are not equal
      */
     public ResponseBody isEqualTo(final String expectedValue) throws AssertionError {
-        AssertionUtil.assertEqual(jsonPath, fieldValue, JsonParser.parseString(expectedValue));
+        AssertionUtil.assertEqualJsonElements(fieldValue, JsonParser.parseString(expectedValue));
 
         return responseBody;
     }

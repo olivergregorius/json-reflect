@@ -9,13 +9,10 @@ import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatchingUtil;
 import dev.gregorius.library.json.reflect.util.fuzzy.NullMatcher;
 import org.apache.commons.lang3.StringUtils;
-import org.hamcrest.Matcher;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-
-import static org.hamcrest.Matchers.equalTo;
 
 public class AssertionUtil {
 
@@ -24,23 +21,6 @@ public class AssertionUtil {
 
     private static final NullMatcher NULL_MATCHER = new NullMatcher();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    /**
-     * Asserts the actual value to equal the expected value.
-     *
-     * @param fieldPath     the path of the field to be included in the error message as hint for the user
-     * @param actualValue   the actual value of the field
-     * @param expectedValue the expected value
-     * @param <T>           the type of the value
-     * @throws AssertionError if the values are not equal
-     */
-    public static <T> void assertEqual(final String fieldPath, final T actualValue, final T expectedValue) throws AssertionError {
-        final Matcher<T> matcher = equalTo(expectedValue);
-        if (!matcher.matches(actualValue)) {
-            final String errorMessage = String.format("Expected '%s' to be equal.%nActual  : %s%nExpected: %s%n", fieldPath, GSON.toJson(actualValue), GSON.toJson(expectedValue));
-            throw new AssertionError(errorMessage);
-        }
-    }
 
     private static void assertIsOfType(final String fieldPath, final JsonElement actualValue, final FuzzyMatcher fuzzyMatcher) {
         if (!fuzzyMatcher.matches(actualValue)) {

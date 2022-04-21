@@ -1,20 +1,23 @@
 package dev.gregorius.library.json.reflect.model;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import dev.gregorius.library.json.reflect.JsonReflect;
 import dev.gregorius.library.json.reflect.setup.BaseTest;
+import io.burt.jmespath.parser.ParseException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ResponseBodyFieldTest extends BaseTest {
-
-    private static final String NO_JSON_OBJECT = """
-        ["value", "second"]
-        """;
 
     private static final String JSON_OBJECT = """
         {
@@ -24,40 +27,82 @@ class ResponseBodyFieldTest extends BaseTest {
               "anotherValue": "HelloWorld"
             }
           },
-          "value": 1234
+          "value": 1234,
+          "array": [
+            {
+              "id": "0001",
+              "value": "first value",
+              "category": "one"
+            },
+            {
+              "id": "0002",
+              "value": "second value",
+              "category": "two"
+            },
+            {
+              "id": "0003",
+              "value": "third value",
+              "category": "one"
+            }
+          ]
         }
         """;
 
-    @Test
-    void given_noJsonObject_when_creatingResponseBodyField_then_IllegalArgumentExceptionIsThrown() {
-        final Throwable exception = assertThrows(IllegalArgumentException.class,
-            () -> JsonReflect.endpoint("/post-reflecting-body")
-                .body(NO_JSON_OBJECT)
-                .when()
-                .post()
-                .then()
-                .getResponseBody()
-                .valueOf(".value"));
-
-        assertThat(exception.getMessage()).isEqualTo("Unable to traverse document as it is no JSON object");
+    private static Stream<Arguments> jmesPathMappings() {
+        return Stream.of(
+            Arguments.of("data.nestedObject.value", "5432"),
+            Arguments.of("data.nestedObject.anotherValue", "HelloWorld"),
+            Arguments.of("value", "1234"),
+            Arguments.of("array[1]", """
+                {
+                  "id": "0002",
+                  "value": "second value",
+                  "category": "two"
+                }
+                """),
+            Arguments.of("array[?id == '0002']", """
+                [
+                  {
+                    "id": "0002",
+                    "value": "second value",
+                    "category": "two"
+                  }
+                ]
+                """),
+            Arguments.of("array[?category == 'one']", """
+                [
+                  {
+                    "id": "0001",
+                    "value": "first value",
+                    "category": "one"
+                  },
+                  {
+                    "id": "0003",
+                    "value": "third value",
+                    "category": "one"
+                  }
+                ]
+                """)
+        );
     }
 
     @Test
-    void given_invalidPathTraversingNonJsonObject_when_creatingResponseBodyField_then_IllegalArgumentExceptionIsThrown() {
-        final Throwable exception = assertThrows(IllegalArgumentException.class,
+    void given_invalidJmesPath_when_creatingResponseBodyField_then_ParseExceptionIsThrown() {
+        final Throwable exception = assertThrows(ParseException.class,
             () -> JsonReflect.endpoint("/post-reflecting-body")
                 .body(JSON_OBJECT)
                 .when()
                 .post()
                 .then()
                 .getResponseBody()
-                .valueOf(".value.invalidPath"));
+                .valueOf("$.data.nestedObject.value"));
 
-        assertThat(exception.getMessage()).isEqualTo("The path '.value.invalidPath' is not valid");
+        assertThat(exception.getMessage()).startsWith("Unable to compile expression \"$.data.nestedObject.value\"");
     }
 
-    @Test
-    void given_validPath_when_creatingResponseBodyField_then_extractedValueIsAsExpected() {
+    @ParameterizedTest
+    @MethodSource("jmesPathMappings")
+    void given_validJmesPath_when_creatingResponseBodyField_then_extractedValueIsAsExpected(final String jmesPath, final String resultJson) {
         final ResponseBody responseBody = JsonReflect.endpoint("/post-reflecting-body")
             .body(JSON_OBJECT)
             .when()
@@ -65,11 +110,8 @@ class ResponseBodyFieldTest extends BaseTest {
             .then()
             .getResponseBody();
 
-        final JsonElement fieldValue = responseBody.valueOf(".data.nestedObject.value").getValue();
-        assertThat(fieldValue.getAsInt()).isEqualTo(5432);
-
-        final JsonElement anotherFieldValue = responseBody.valueOf(".data.nestedObject.anotherValue").getValue();
-        assertThat(anotherFieldValue.getAsString()).isEqualTo("HelloWorld");
+        final JsonElement fieldValue = responseBody.valueOf(jmesPath).getValue();
+        assertThat(fieldValue).isEqualTo(JsonParser.parseString(resultJson));
     }
 
     @Test
@@ -81,7 +123,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .post()
                 .then()
                 .getResponseBody()
-                .valueOf(".data.nestedObject.value")
+                .valueOf("data.nestedObject.value")
                 .isEqualTo("5432")
         );
 
@@ -92,7 +134,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .post()
                 .then()
                 .getResponseBody()
-                .valueOf(".data.nestedObject.anotherValue")
+                .valueOf("data.nestedObject.anotherValue")
                 .isEqualTo("\"HelloWorld\"")
         );
     }
@@ -106,7 +148,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .post()
                 .then()
                 .getResponseBody()
-                .valueOf(".data.nestedObject.value")
+                .valueOf("data.nestedObject.value")
                 .isEqualTo("1234")
         );
     }
@@ -121,7 +163,7 @@ class ResponseBodyFieldTest extends BaseTest {
             .post()
             .then()
             .getResponseBody()
-            .valueOf(".data.nestedObject.value")
+            .valueOf("data.nestedObject.value")
             .assignTo(jsonValueContainer);
 
         assertThat(jsonValueContainer.getValue()).isEqualTo(new JsonPrimitive(5432));
