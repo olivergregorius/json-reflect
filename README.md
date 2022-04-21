@@ -20,7 +20,7 @@ testing your APIs.
 - JSON fuzzy matching
 - JSON array matching ignoring the order of elements
 - Endpoint authentication/authorization (Basic Auth, Bearer Token, API Token)
-- Response body field extraction
+- Response body field extraction using JMESPath
 
 ## Getting started
 
@@ -114,8 +114,8 @@ Fuzzy matching, as you might know it from other testing frameworks, can be used 
 
 #### Extract fields from the response body
 
-Single fields of the response body can be extracted by calling `valueOf(final String jsonPath)` passing the [JSON-path expression](https://jsonpath.com/) of the
-desired value. The extracted value can be
+Single fields of the response body can be extracted by calling `valueOf(final String jmesPath)` passing
+the [JMESPath expression](https://jmespath.org/specification.html) of the desired value. The extracted value can be
 
 - checked against an expected value by calling `isEqualTo(String expectedValue)`.
 - extracted as `JsonElement`-instance by calling `getValue()`.
