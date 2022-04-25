@@ -1,5 +1,4 @@
 plugins {
-    id "org.springframework.boot" version "2.6.3"
     id "java"
 
     id "jacoco"
@@ -11,8 +10,13 @@ plugins {
 }
 
 def snapshotVersion = "0.1.0-SNAPSHOT"
-def springBootVersion = "2.6.3"
-def lombokVersion = "1.18.22"
+def springVersion = "5.3.19"
+def springBootVersion = "2.6.7"
+def slf4jVersion = "1.7.36"
+def lombokVersion = "1.18.24"
+def gsonVersion = "2.9.0"
+def jmesPathVersion = "0.5.1"
+def hamcrestVersion = "2.2"
 def commonsLang3Version = "3.12.0"
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -24,21 +28,24 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot
-    implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    // Spring and Spring Boot
+    implementation "org.springframework:spring-web:$springVersion"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+
+    // Logging
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
     // Lombok
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     // GSON
-    implementation "com.google.code.gson:gson"
-    implementation "io.burt:jmespath-gson:0.5.1"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "io.burt:jmespath-gson:$jmesPathVersion"
 
     // Hamcrest
-    implementation "org.hamcrest:hamcrest"
+    implementation "org.hamcrest:hamcrest:$hamcrestVersion"
 
     // Util
     implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
@@ -47,14 +54,6 @@ dependencies {
 java {
     withJavadocJar()
     withSourcesJar()
-}
-
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
 }
 
 def testCoverageExludes = []
