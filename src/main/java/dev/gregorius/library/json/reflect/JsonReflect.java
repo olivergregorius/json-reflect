@@ -7,7 +7,6 @@ import com.google.gson.JsonSyntaxException;
 import dev.gregorius.library.json.reflect.model.ApiRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -17,10 +16,12 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -67,17 +68,17 @@ public class JsonReflect {
     }
 
     private static RestTemplate buildRestTemplate(final String baseUrl) {
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
-            .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
-            .interceptors(new LoggingInterceptor())
-            .errorHandler(new NoopResponseErrorHandler())
-            .messageConverters(new StringHttpMessageConverter(UTF_8));
+        final RestTemplate newRestTemplate = new RestTemplate();
+        newRestTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+        newRestTemplate.setInterceptors(List.of(new LoggingInterceptor()));
+        newRestTemplate.setErrorHandler(new NoopResponseErrorHandler());
+        newRestTemplate.setMessageConverters(List.of(new StringHttpMessageConverter(UTF_8)));
 
         if (StringUtils.isNotEmpty(baseUrl)) {
-            restTemplateBuilder = restTemplateBuilder.rootUri(baseUrl);
+            newRestTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(baseUrl));
         }
 
-        return restTemplateBuilder.build();
+        return newRestTemplate;
     }
 
     private static class LoggingInterceptor implements ClientHttpRequestInterceptor {
