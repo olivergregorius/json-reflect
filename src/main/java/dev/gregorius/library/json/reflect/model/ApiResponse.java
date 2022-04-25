@@ -54,7 +54,7 @@ public class ApiResponse {
      *
      * @return a new {@link ResponseBody} instance containing the response body
      */
-    public ResponseBody getResponseBody() {
+    public ResponseBody responseBody() {
         return new ResponseBody(responseEntity.getBody());
     }
 }

@@ -66,7 +66,7 @@ class ResponseBodyTest extends BaseTest {
             .when()
             .post()
             .then()
-            .getResponseBody()
+            .responseBody()
             .getAsString();
 
         assertThat(actualResponseBodyString).isEqualTo(ACTUAL_JSON_DOCUMENT);
@@ -80,7 +80,7 @@ class ResponseBodyTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .isEqualTo(EXPECTED_JSON_DOCUMENT)
         );
     }
@@ -93,7 +93,7 @@ class ResponseBodyTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .isEqualTo(UNEQUAL_EXPECTED_JSON_DOCUMENT)
         );
     }
@@ -106,7 +106,7 @@ class ResponseBodyTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .isEqualTo(EXPECTED_JSON_DOCUMENT)
         );
     }
