@@ -99,7 +99,7 @@ By calling `httpStatusCodeIs(Integer expectedStatusCode)` the HTTP response code
 
 #### Extract the response body
 
-Calling the method `getResponseBody()` extracts the response body out of the response for [further handling](#handling-response-body).
+Calling the method `responseBody()` extracts the response body out of the response for [further handling](#handling-response-body).
 
 ### Handling response body
 
@@ -144,7 +144,7 @@ class JsonReflectTest {
             .then()
             .httpStatusCodeIs(200)
             .and()
-            .getResponseBody()
+            .responseBody()
             .isEqualTo("""
                 {
                   "data": [
@@ -207,7 +207,7 @@ class JsonReflectTest {
             .then()
             .httpStatusCodeIs(201)
             .and()
-            .getResponseBody()
+            .responseBody()
             .isEqualTo("""
                 {
                   "data": {

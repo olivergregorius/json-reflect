@@ -94,7 +94,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .valueOf("$.data.nestedObject.value"));
 
         assertThat(exception.getMessage()).startsWith("Unable to compile expression \"$.data.nestedObject.value\"");
@@ -108,7 +108,7 @@ class ResponseBodyFieldTest extends BaseTest {
             .when()
             .post()
             .then()
-            .getResponseBody();
+            .responseBody();
 
         final JsonElement fieldValue = responseBody.valueOf(jmesPath).getValue();
         assertThat(fieldValue).isEqualTo(JsonParser.parseString(resultJson));
@@ -122,7 +122,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .valueOf("data.nestedObject.value")
                 .isEqualTo("5432")
         );
@@ -133,7 +133,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .valueOf("data.nestedObject.anotherValue")
                 .isEqualTo("\"HelloWorld\"")
         );
@@ -147,7 +147,7 @@ class ResponseBodyFieldTest extends BaseTest {
                 .when()
                 .post()
                 .then()
-                .getResponseBody()
+                .responseBody()
                 .valueOf("data.nestedObject.value")
                 .isEqualTo("1234")
         );
@@ -162,7 +162,7 @@ class ResponseBodyFieldTest extends BaseTest {
             .when()
             .post()
             .then()
-            .getResponseBody()
+            .responseBody()
             .valueOf("data.nestedObject.value")
             .assignTo(jsonValueContainer);
 
