@@ -41,7 +41,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     // GSON
-    implementation "com.google.code.gson:gson:$gsonVersion"
+    api "com.google.code.gson:gson:$gsonVersion"
     implementation "io.burt:jmespath-gson:$jmesPathVersion"
 
     // Hamcrest
