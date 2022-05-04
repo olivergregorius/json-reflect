@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatchingUtil;
+import dev.gregorius.library.json.reflect.util.fuzzy.IgnoreMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.NullMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.PresentMatcher;
 import org.apache.commons.lang3.StringUtils;
@@ -114,6 +115,11 @@ public class AssertionUtil {
             final String expectedKeyPath = StringUtils.stripStart(String.format("%s.%s", basePath, expectedKey), ".");
             final JsonElement expectedValue = expectedObject.get(expectedKey);
             final Optional<FuzzyMatcher> fuzzyMatcherOptional = FuzzyMatchingUtil.getFuzzyMatcher(expectedValue);
+
+            // Fuzzy matching for ignore
+            if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get() instanceof IgnoreMatcher) {
+                continue;
+            }
 
             // Fuzzy matching for presence
             if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get() instanceof PresentMatcher) {

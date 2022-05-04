@@ -16,6 +16,7 @@ public class FuzzyMatchingUtil {
         new DateMatcher(),
         new DateTimeMatcher(),
         new FloatMatcher(),
+        new IgnoreMatcher(),
         new IntegerMatcher(),
         new NullMatcher(),
         new ObjectMatcher(),
