@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatcher;
 import dev.gregorius.library.json.reflect.util.fuzzy.FuzzyMatchingUtil;
 import dev.gregorius.library.json.reflect.util.fuzzy.NullMatcher;
+import dev.gregorius.library.json.reflect.util.fuzzy.PresentMatcher;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -111,12 +112,21 @@ public class AssertionUtil {
         // If no AssertionError is thrown during iteration the objects are considered equal.
         for (final String expectedKey : expectedObject.keySet()) {
             final String expectedKeyPath = StringUtils.stripStart(String.format("%s.%s", basePath, expectedKey), ".");
+            final JsonElement expectedValue = expectedObject.get(expectedKey);
+            final Optional<FuzzyMatcher> fuzzyMatcherOptional = FuzzyMatchingUtil.getFuzzyMatcher(expectedValue);
+
+            // Fuzzy matching for presence
+            if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get() instanceof PresentMatcher) {
+                if (actualObject.has(expectedKey)) {
+                    continue;
+                }
+            }
+
             if (!actualObject.has(expectedKey)) {
                 errorMessage = String.format("Expected JSON value '%s' to be present.", expectedKeyPath);
                 throw new AssertionError(errorMessage);
             }
 
-            final JsonElement expectedValue = expectedObject.get(expectedKey);
             final JsonElement actualValue = actualObject.get(expectedKey);
             errorMessage = String.format("Expected JSON values '%s' to be equal.%nActual  : %s%nExpected: %s%n", expectedKeyPath, GSON.toJson(actualValue), GSON.toJson(expectedValue));
 
@@ -127,7 +137,6 @@ public class AssertionUtil {
 
             // As both values could be null we need to do a null check here prior to further checks
             if (actualValue != null) {
-                final Optional<FuzzyMatcher> fuzzyMatcherOptional = FuzzyMatchingUtil.getFuzzyMatcher(expectedValue);
                 if (fuzzyMatcherOptional.isPresent()) {
                     // We do not check the value itself but if it represents the data type expected
                     assertIsOfType(expectedKeyPath, actualValue, fuzzyMatcherOptional.get());

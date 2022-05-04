@@ -19,6 +19,7 @@ public class FuzzyMatchingUtil {
         new IntegerMatcher(),
         new NullMatcher(),
         new ObjectMatcher(),
+        new PresentMatcher(),
         new StringMatcher(),
         new TimeMatcher(),
         new UUIDMatcher()
@@ -37,7 +38,7 @@ public class FuzzyMatchingUtil {
 
         final String potentialFuzzyTag = jsonElement.getAsString();
         return FUZZY_MATCHERS.stream()
-            .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equals(potentialFuzzyTag))
+            .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equalsIgnoreCase(potentialFuzzyTag))
             .findFirst();
     }
 }
