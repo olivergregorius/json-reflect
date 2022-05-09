@@ -95,6 +95,13 @@ class AssertionUtilTest {
             }
             """;
 
+    private static final String OBJECT_CONTAINING_REGEX_TYPE_OBJECT =
+        """
+            {
+              "object": "#regex ^.*String$"
+            }
+            """;
+
     private static final String OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT =
         """
             {
@@ -267,6 +274,7 @@ class AssertionUtilTest {
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_PRESENT_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_IGNORE_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_NOTNULL_TYPE_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_REGEX_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_INTERCHANGED_ARRAY)
         );

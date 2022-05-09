@@ -21,6 +21,15 @@ public interface FuzzyMatcher {
     Predicate<JsonElement> getPredicate();
 
     /**
+     * Sets an additional argument for the FuzzyMatcher to perform the match, if required
+     *
+     * @param fuzzyMatchingString the String containing the fuzzy matching declaration, passed as {@link JsonElement}
+     */
+    default void setArgument(final JsonElement fuzzyMatchingString) {
+        // Nothing to do by default
+    }
+
+    /**
      * Performs fuzzy match for the given value.
      *
      * @param jsonElement the value to be fuzzy matched

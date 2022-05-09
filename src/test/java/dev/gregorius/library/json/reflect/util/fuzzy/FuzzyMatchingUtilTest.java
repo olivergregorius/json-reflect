@@ -27,9 +27,13 @@ class FuzzyMatchingUtilTest {
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#date"))).get().isInstanceOf(DateMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#datetime"))).get().isInstanceOf(DateTimeMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#float"))).get().isInstanceOf(FloatMatcher.class);
+        assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#ignore"))).get().isInstanceOf(IgnoreMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#integer"))).get().isInstanceOf(IntegerMatcher.class);
+        assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#notnull"))).get().isInstanceOf(NotNullMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#null"))).get().isInstanceOf(NullMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#object"))).get().isInstanceOf(ObjectMatcher.class);
+        assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#present"))).get().isInstanceOf(PresentMatcher.class);
+        assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#regex"))).get().isInstanceOf(RegexMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#string"))).get().isInstanceOf(StringMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#time"))).get().isInstanceOf(TimeMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#uuid"))).get().isInstanceOf(UUIDMatcher.class);

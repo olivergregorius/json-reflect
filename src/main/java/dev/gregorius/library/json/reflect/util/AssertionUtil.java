@@ -144,8 +144,10 @@ public class AssertionUtil {
             // As both values could be null we need to do a null check here prior to further checks
             if (actualValue != null) {
                 if (fuzzyMatcherOptional.isPresent()) {
+                    final FuzzyMatcher fuzzyMatcher = fuzzyMatcherOptional.get();
+                    fuzzyMatcher.setArgument(expectedValue);
                     // We do not check the value itself but if it represents the data type expected
-                    assertIsOfType(expectedKeyPath, actualValue, fuzzyMatcherOptional.get());
+                    assertIsOfType(expectedKeyPath, actualValue, fuzzyMatcher);
                 } else if (actualValue.isJsonObject() && expectedValue.isJsonObject()) {
                     // If both values are Json objects we check those recursively
                     assertEqualJsonObjects(expectedKeyPath, actualValue.getAsJsonObject(), expectedValue.getAsJsonObject());

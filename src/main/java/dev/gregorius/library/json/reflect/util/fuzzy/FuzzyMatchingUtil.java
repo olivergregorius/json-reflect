@@ -27,6 +27,10 @@ public class FuzzyMatchingUtil {
         new UUIDMatcher()
     );
 
+    private static final List<FuzzyMatcher> FUZZY_MATCHERS_WITH_ARGUMENT = List.of(
+        new RegexMatcher()
+    );
+
     /**
      * Returns the determined FuzzyMatcher for the given value.
      *
@@ -38,9 +42,20 @@ public class FuzzyMatchingUtil {
             return Optional.empty();
         }
 
-        final String potentialFuzzyTag = jsonElement.getAsString();
-        return FUZZY_MATCHERS.stream()
-            .filter(fuzzyMatcher -> fuzzyMatcher.getFuzzyTag().equalsIgnoreCase(potentialFuzzyTag))
+        final String fuzzyExpression = jsonElement.getAsString();
+
+        // Look up FuzzyMatcher with fuzzy expression matching the fuzzy tag exactly
+        final Optional<FuzzyMatcher> fuzzyMatcherOptional = FUZZY_MATCHERS.stream()
+            .filter(fuzzyMatcher -> fuzzyExpression.equalsIgnoreCase(fuzzyMatcher.getFuzzyTag()))
+            .findFirst();
+
+        if (fuzzyMatcherOptional.isPresent()) {
+            return fuzzyMatcherOptional;
+        }
+
+        // Look up FuzzyMatcher with fuzzy expression containing the fuzzy tag additional to the given arguments for the FuzzyMatcher
+        return FUZZY_MATCHERS_WITH_ARGUMENT.stream()
+            .filter(fuzzyMatcherWithArgument -> fuzzyExpression.contains(fuzzyMatcherWithArgument.getFuzzyTag()))
             .findFirst();
     }
 }
