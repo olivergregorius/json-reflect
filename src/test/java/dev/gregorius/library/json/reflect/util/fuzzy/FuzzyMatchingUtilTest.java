@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FuzzyMatchingUtilTest {
 
@@ -54,5 +55,11 @@ class FuzzyMatchingUtilTest {
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#time?"))).get().isInstanceOf(TimeMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#uuid"))).get().isInstanceOf(UUIDMatcher.class);
         assertThat(FuzzyMatchingUtil.getFuzzyMatcher(new JsonPrimitive("#uuid?"))).get().isInstanceOf(UUIDMatcher.class);
+    }
+
+    @Test
+    void given_invalidArgument_when_setArgumentForRegexMatcher_then_IllegalArgumentExceptionIsThrown() {
+        final RegexMatcher regexMatcher = new RegexMatcher();
+        assertThatThrownBy(() -> regexMatcher.setArgument(new JsonPrimitive(1234))).isInstanceOf(IllegalArgumentException.class);
     }
 }

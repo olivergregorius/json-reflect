@@ -1,23 +1,16 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import com.google.gson.JsonPrimitive;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 
 class RegexMatcherTest extends FuzzyMatcherTest {
 
-    private RegexMatcher regexMatcher;
-
-    @BeforeEach
-    void setUp() {
-        regexMatcher = new RegexMatcher();
-        regexMatcher.setArgument(new JsonPrimitive("#regex ^.*a Message\\s+for you$"));
-    }
-
     @Override
     protected FuzzyMatcher fuzzyMatcherUnderTest() {
+        final RegexMatcher regexMatcher = new RegexMatcher();
+        regexMatcher.setArgument(new JsonPrimitive("#regex ^.*a Message\\s+for you$"));
         return regexMatcher;
     }
 

@@ -102,7 +102,7 @@ public class AssertionUtil {
      * @throws AssertionError if the objects are not equal
      */
     public static void assertEqualJsonObjects(final String basePath, final JsonObject actualObject, final JsonObject expectedObject) throws AssertionError {
-        String errorMessage = String.format("Expected JSON objects '%s' to be equal.%nActual  : %s%nExpected: %s%n", basePath, GSON.toJson(actualObject), GSON.toJson(expectedObject));
+        String errorMessage;
 
         // Traverse objects key by key. We do not need to check further if the values differ for which an AssertionError is thrown.
         // If no AssertionError is thrown during iteration the objects are considered equal.
