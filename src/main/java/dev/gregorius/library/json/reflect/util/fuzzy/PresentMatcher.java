@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * Pseudo matcher for key presence check
  */
-public class PresentMatcher implements FuzzyMatcher {
+public class PresentMatcher extends AbstractFuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

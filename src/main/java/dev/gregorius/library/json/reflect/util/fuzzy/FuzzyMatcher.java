@@ -6,6 +6,8 @@ import java.util.function.Predicate;
 
 public interface FuzzyMatcher {
 
+    static final String OPTIONAL_MARKER = "?";
+
     /**
      * Returns the fuzzy tag of the FuzzyMatcher.
      *
@@ -28,6 +30,20 @@ public interface FuzzyMatcher {
     default void setArgument(final JsonElement fuzzyMatchingString) {
         // Nothing to do by default
     }
+
+    /**
+     * Indicates if the FuzzyMatcher is flagged as optional.
+     *
+     * @return {@code true} if FuzzyMatcher is flagged as optional, {@code false} otherwise
+     */
+    boolean isOptional();
+
+    /**
+     * Sets the optional flag.
+     *
+     * @param optional boolean flag
+     */
+    void setOptional(final boolean optional);
 
     /**
      * Performs fuzzy match for the given value.

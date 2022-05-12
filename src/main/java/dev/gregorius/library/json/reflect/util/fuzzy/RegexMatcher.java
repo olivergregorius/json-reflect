@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegexMatcher implements FuzzyMatcher {
+public class RegexMatcher extends AbstractFuzzyMatcher {
 
     private String regexPattern;
 

@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * Pseudo matcher for ignore check
  */
-public class IgnoreMatcher implements FuzzyMatcher {
+public class IgnoreMatcher extends AbstractFuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

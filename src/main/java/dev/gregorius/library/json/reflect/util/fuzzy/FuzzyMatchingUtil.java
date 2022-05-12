@@ -1,6 +1,7 @@
 package dev.gregorius.library.json.reflect.util.fuzzy;
 
 import com.google.gson.JsonElement;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,19 +44,33 @@ public class FuzzyMatchingUtil {
         }
 
         final String fuzzyExpression = jsonElement.getAsString();
+        final String optionalMarker = StringUtils.contains(fuzzyExpression, FuzzyMatcher.OPTIONAL_MARKER) ? FuzzyMatcher.OPTIONAL_MARKER : StringUtils.EMPTY;
 
         // Look up FuzzyMatcher with fuzzy expression matching the fuzzy tag exactly
-        final Optional<FuzzyMatcher> fuzzyMatcherOptional = FUZZY_MATCHERS.stream()
-            .filter(fuzzyMatcher -> fuzzyExpression.equalsIgnoreCase(fuzzyMatcher.getFuzzyTag()))
+        Optional<FuzzyMatcher> fuzzyMatcherOptional = FUZZY_MATCHERS.stream()
+            .filter(fuzzyMatcher -> fuzzyExpression.equalsIgnoreCase(fuzzyMatcher.getFuzzyTag() + optionalMarker))
             .findFirst();
 
         if (fuzzyMatcherOptional.isPresent()) {
+            // If a FuzzyMatcher was found with optional-marker then set the FuzzyMatcher's optional flag to true
+            if (StringUtils.isNotEmpty(optionalMarker)) {
+                fuzzyMatcherOptional.get().setOptional(true);
+            }
             return fuzzyMatcherOptional;
         }
 
-        // Look up FuzzyMatcher with fuzzy expression containing the fuzzy tag additional to the given arguments for the FuzzyMatcher
-        return FUZZY_MATCHERS_WITH_ARGUMENT.stream()
+        // Look up FuzzyMatcher with fuzzy expression containing the fuzzy tag additional to the given arguments for the FuzzyMatcher. We cannot look up the
+        // FuzzyMatcher with the optional-marker as suffix as the argument could also include the optional marker - leading to unexpected results. The presence
+        // check of the optional-marker for setting the optional flag is done in the next step.
+        fuzzyMatcherOptional = FUZZY_MATCHERS_WITH_ARGUMENT.stream()
             .filter(fuzzyMatcherWithArgument -> fuzzyExpression.contains(fuzzyMatcherWithArgument.getFuzzyTag()))
             .findFirst();
+
+        // If a FuzzyMatcher was found with optional-marker then set the FuzzyMatcher's optional flag to true.
+        if (fuzzyMatcherOptional.isPresent() && fuzzyExpression.contains(fuzzyMatcherOptional.get().getFuzzyTag() + FuzzyMatcher.OPTIONAL_MARKER)) {
+            fuzzyMatcherOptional.get().setOptional(true);
+        }
+
+        return fuzzyMatcherOptional;
     }
 }

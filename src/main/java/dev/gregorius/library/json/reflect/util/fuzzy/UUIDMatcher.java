@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class UUIDMatcher implements FuzzyMatcher {
+public class UUIDMatcher extends AbstractFuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {

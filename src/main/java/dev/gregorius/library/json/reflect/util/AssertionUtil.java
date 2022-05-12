@@ -104,11 +104,6 @@ public class AssertionUtil {
     public static void assertEqualJsonObjects(final String basePath, final JsonObject actualObject, final JsonObject expectedObject) throws AssertionError {
         String errorMessage = String.format("Expected JSON objects '%s' to be equal.%nActual  : %s%nExpected: %s%n", basePath, GSON.toJson(actualObject), GSON.toJson(expectedObject));
 
-        // Check if object sizes differ
-        if (actualObject.size() != expectedObject.size()) {
-            throw new AssertionError(errorMessage);
-        }
-
         // Traverse objects key by key. We do not need to check further if the values differ for which an AssertionError is thrown.
         // If no AssertionError is thrown during iteration the objects are considered equal.
         for (final String expectedKey : expectedObject.keySet()) {
@@ -122,10 +117,13 @@ public class AssertionUtil {
             }
 
             // Fuzzy matching for presence
-            if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get() instanceof PresentMatcher) {
-                if (actualObject.has(expectedKey)) {
-                    continue;
-                }
+            if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get() instanceof PresentMatcher && actualObject.has(expectedKey)) {
+                continue;
+            }
+
+            // FuzzyMatcher is present, but optional and the actualObject doesn't have the expected key - continue
+            if (fuzzyMatcherOptional.isPresent() && fuzzyMatcherOptional.get().isOptional() && !actualObject.has(expectedKey)) {
+                continue;
             }
 
             if (!actualObject.has(expectedKey)) {

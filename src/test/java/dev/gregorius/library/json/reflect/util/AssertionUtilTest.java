@@ -74,6 +74,14 @@ class AssertionUtilTest {
             }
             """;
 
+    private static final String OBJECT_CONTAINING_OPTIONAL_OBJECT_TYPE_OBJECT =
+        """
+            {
+              "object": "#object",
+              "anotherObject": "#object?"
+            }
+            """;
+
     private static final String OBJECT_CONTAINING_PRESENT_TYPE_OBJECT =
         """
             {
@@ -98,7 +106,7 @@ class AssertionUtilTest {
     private static final String OBJECT_CONTAINING_REGEX_TYPE_OBJECT =
         """
             {
-              "object": "#regex ^.*String$"
+              "object": "#regex ^.*String?$"
             }
             """;
 
@@ -257,7 +265,6 @@ class AssertionUtilTest {
 
     private static Stream<Arguments> notEqualJsonObjects() {
         return Stream.of(
-            Arguments.of("Different objects size", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_TWO_OBJECTS, "Expected JSON objects '' to be equal.\nActual  : " + OBJECT_CONTAINING_OBJECT + "Expected: " + OBJECT_CONTAINING_TWO_OBJECTS),
             Arguments.of("One traversed object does not exist", OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_ANOTHER_OBJECT, "Expected JSON value 'anotherObject' to be present."),
             Arguments.of("One traversed object is null", OBJECT_CONTAINING_NULL_OBJECT, OBJECT_CONTAINING_OBJECT, "Expected JSON values 'object' to be equal.\nActual  : null\nExpected: {}\n"),
             Arguments.of("Not matching data type", OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_OBJECT_TYPE_OBJECT, "Expected 'object' to be of type object.\nActual value: \"This is a String\"\n"),
@@ -275,6 +282,8 @@ class AssertionUtilTest {
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_IGNORE_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_NOTNULL_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_STRING_OBJECT, OBJECT_CONTAINING_REGEX_TYPE_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_OBJECT, OBJECT_CONTAINING_OPTIONAL_OBJECT_TYPE_OBJECT),
+            Arguments.of(OBJECT_CONTAINING_TWO_OBJECTS, OBJECT_CONTAINING_OPTIONAL_OBJECT_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT, OBJECT_CONTAINING_OBJECT_WITH_NESTED_OBJECT_TYPE_OBJECT),
             Arguments.of(OBJECT_CONTAINING_ARRAY, OBJECT_CONTAINING_INTERCHANGED_ARRAY)
         );
