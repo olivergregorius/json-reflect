@@ -110,7 +110,34 @@ The response body can be extracted as String by calling `getAsString()`.
 #### Response body assertion
 
 Equality of the whole response body can be checked by calling the method `isEqualTo(String expectedResponseBody)` passing the expected response body as String.
-Fuzzy matching, as you might know it from other testing frameworks, can be used here. The order of elements in an array does not matter.
+[Fuzzy matching](#fuzzy-matchers), as you might know it from other testing frameworks, can be used here. The order of elements in an array does not matter.
+
+#### Fuzzy matchers
+
+This framework provides fuzzy matchers to assert some special characteristics of a value instead of the value itself. Fuzzy matchers are introduced by the "#"
+-character. The following fuzzy matchers are
+supported:
+
+| Fuzzy Matcher       | Description                                                                      |
+|---------------------|----------------------------------------------------------------------------------|
+| #array              | Matches a JSON array                                                             |
+| #boolean            | Matches a boolean value (true or false)                                          |
+| #date               | Matches a date, see [date format examples](#date-format-examples)                |
+| #time               | Matches a time, see [time format examples](#time-format-examples)                |
+| #datetime           | Matches a date-time, see [datetime format examples](#datetime-format-examples)   |
+| #float              | Matches a floating point number                                                  |
+| #integer            | Matches a non-floating point number                                              |
+| #ignore             | Ignores the field and its value completely                                       |
+| #notnull            | Matches any non-null value                                                       |
+| #null               | Matches a null-value                                                             |
+| #object             | Matches a JSON object                                                            |
+| #present            | Asserts that the field is present and has any value (including null)             |
+| #regex \<argument\> | Matches a string matching the regular expression passed as argument              |
+| #string             | Matches a string                                                                 |
+| #uuid               | Matches a UUID formatted as string (e.g. "a96bb631-5738-4c5d-bd6f-06fe3ccc47bd") |
+
+All fuzzy matchers can be optionalized by appending a "?" to it, meaning that the corresponding field is not mandatory but if it is present it must match the
+characteristics defined by the fuzzy matcher.
 
 #### Extract fields from the response body
 
@@ -228,3 +255,91 @@ The POST-endpoint "https://testserver.company.com:8080/vehicles/cars" is tested 
 body for creation of a new car instance. The status should be 201 (created) in this case. Additionally, fuzzy matching is used for assertion of the response
 body, because the resource id may not be predictable in this case. The resource id is assigned to a `JsonValueContainer` for being used in subsequent test cases
 for example.
+
+### Testcase 3 - Fuzzy matching with optional fields
+
+```java
+class JsonReflectTest {
+
+    @BeforeAll
+    void beforeAll() {
+        JsonReflect.setBaseUrl("https://testserver.company.com:8080");
+    }
+
+    @Test
+    void testGet() {
+        JsonReflect.endpoint("/vehicles/cars")
+            .given()
+            .authentication().basicAuth("testuser", "testpass")
+            .parameter("brand", "VW")
+            .when()
+            .get()
+            .then()
+            .httpStatusCodeIs(200)
+            .and()
+            .responseBody()
+            .isEqualTo("""
+                {
+                  "data": [
+                    {
+                      "id": 1,
+                      "attributes": {
+                        "brand": "VW",
+                        "model": "Passat"
+                        "constructor": "#string?"
+                      }
+                    },
+                    {
+                      "id": 2,
+                      "attributes": #present
+                    }
+                  ]
+                }
+                """);
+    }
+}
+```
+
+The endpoint "https://testserver.company.com:8080/vehicles/cars" is called using Basic Auth as testuser. One
+parameter "brand" is set to the value "VW", resulting in the following URL to be called: "https://testserver.company.com:8080/vehicles/cars?brand=VW". The
+status code is asserted to be 200, furthermore the response body is checked. The field "constructor" is not mandatory, but if it is present it must be a string.
+The "data"-array must contain 2 elements whereas the "attributes"-field of the second element is only checked to be present, regardless of what type it is and
+what it contains.
+
+## Appendix
+
+### Date format examples
+
+- 2022
+- 2022-05
+- 2022-05-23
+
+### Time format examples
+
+- 23:48Z
+- 23:48+02:00
+- 23:48:10+02:00
+- 23:48:10.1Z
+- 23:48:10.12Z
+- 23:48:10.123Z
+- 23:48:10.1234Z
+- 23:48:10.12345Z
+- 23:48:10.123456Z
+- 23:48:10.1234567Z
+- 23:48:10.12345678Z
+- 23:48:10.123456789Z
+
+### Datetime format examples
+
+- 2022-05-23T23:48Z
+- 2022-05-23T23:48+02:00
+- 2022-05-23T23:48:10+02:00
+- 2022-05-23T23:48:10.1Z
+- 2022-05-23T23:48:10.12Z
+- 2022-05-23T23:48:10.123Z
+- 2022-05-23T23:48:10.1234Z
+- 2022-05-23T23:48:10.12345Z
+- 2022-05-23T23:48:10.123456Z
+- 2022-05-23T23:48:10.1234567Z
+- 2022-05-23T23:48:10.12345678Z
+- 2022-05-23T23:48:10.123456789Z
