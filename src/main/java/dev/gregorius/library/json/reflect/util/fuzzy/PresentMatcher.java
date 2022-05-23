@@ -4,15 +4,18 @@ import com.google.gson.JsonElement;
 
 import java.util.function.Predicate;
 
-public class BooleanMatcher extends AbstractFuzzyMatcher {
+/**
+ * Pseudo matcher for key presence check
+ */
+public class PresentMatcher extends AbstractFuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {
-        return "#boolean";
+        return "#present";
     }
 
     @Override
     public Predicate<JsonElement> getPredicate() {
-        return jsonElement -> jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isBoolean();
+        return value -> true;
     }
 }

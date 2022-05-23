@@ -6,9 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
-public abstract class DateTimeFuzzyMatcher implements FuzzyMatcher {
+public abstract class DateTimeFuzzyMatcher extends AbstractFuzzyMatcher {
 
-	protected abstract List<DateTimeFormatter> getDateTimeFormatters();
+    protected abstract List<DateTimeFormatter> getDateTimeFormatters();
 
     protected final boolean dateTimeFormattersMatch(final JsonElement value) {
         if (!new StringMatcher().matches(value)) {
