@@ -291,7 +291,7 @@ class JsonReflectTest {
                     },
                     {
                       "id": 2,
-                      "attributes": #present
+                      "attributes": "#present"
                     }
                   ]
                 }
@@ -303,7 +303,7 @@ class JsonReflectTest {
 The endpoint "https://testserver.company.com:8080/vehicles/cars" is called using Basic Auth as testuser. One
 parameter "brand" is set to the value "VW", resulting in the following URL to be called: "https://testserver.company.com:8080/vehicles/cars?brand=VW". The
 status code is asserted to be 200, furthermore the response body is checked. The field "constructor" is not mandatory, but if it is present it must be a string.
-The "data"-array must contain 2 elements whereas the "attributes"-field of the second element is only checked to be present, regardless of what type it is and
+The "data"-array must contain two elements whereas the "attributes"-field of the second element is only checked to be present, regardless of what type it is and
 what it contains.
 
 ## Appendix
