@@ -26,9 +26,9 @@ testing your APIs.
 
 ### Test preparation
 
-The first step is to define the URL of the server serving the endpoints to be tested. This is achieved by calling the static
-method `JsonReflect.setBaseUrl(String baseUrl)`. The `baseUrl`-parameter might be of any common HTTP-URL-format: `scheme://host.domain[:port]`. Setting the base
-URL is only necessary once before executing all tests if not multiple servers should be tested.
+The first step is to define the URL of the server serving the endpoints to be tested. This is achieved by calling the static method
+`JsonReflect.setBaseUrl(String baseUrl)`. The `baseUrl`-parameter might be of any common HTTP-URL-format: `scheme://host.domain[:port]`. Setting the base URL is
+only necessary once before executing all tests if not multiple servers should be tested.
 
 ### Define endpoint to be tested
 
@@ -115,8 +115,7 @@ Equality of the whole response body can be checked by calling the method `isEqua
 #### Fuzzy matchers
 
 This framework provides fuzzy matchers to assert some special characteristics of a value instead of the value itself. Fuzzy matchers are introduced by the "#"
--character. The following fuzzy matchers are
-supported:
+-character. The following fuzzy matchers are supported:
 
 | Fuzzy Matcher       | Description                                                                      |
 |---------------------|----------------------------------------------------------------------------------|
@@ -141,8 +140,8 @@ characteristics defined by the fuzzy matcher.
 
 #### Extract fields from the response body
 
-Single fields of the response body can be extracted by calling `valueOf(final String jmesPath)` passing
-the [JMESPath expression](https://jmespath.org/specification.html) of the desired value. The extracted value can be
+Single fields of the response body can be extracted by calling `valueOf(final String jmesPath)` passing the
+[JMESPath expression](https://jmespath.org/specification.html) of the desired value. The extracted value can be
 
 - checked against an expected value by calling `isEqualTo(String expectedValue)`.
 - extracted as `JsonElement`-instance by calling `getValue()`.
@@ -300,11 +299,10 @@ class JsonReflectTest {
 }
 ```
 
-The endpoint "https://testserver.company.com:8080/vehicles/cars" is called using Basic Auth as testuser. One
-parameter "brand" is set to the value "VW", resulting in the following URL to be called: "https://testserver.company.com:8080/vehicles/cars?brand=VW". The
-status code is asserted to be 200, furthermore the response body is checked. The field "constructor" is not mandatory, but if it is present it must be a string.
-The "data"-array must contain two elements whereas the "attributes"-field of the second element is only checked to be present, regardless of what type it is and
-what it contains.
+The endpoint "https://testserver.company.com:8080/vehicles/cars" is called using Basic Auth as testuser. One parameter "brand" is set to the value "VW",
+resulting in the following URL to be called: "https://testserver.company.com:8080/vehicles/cars?brand=VW". The status code is asserted to be 200, furthermore
+the response body is checked. The field "constructor" is not mandatory, but if it is present it must be a string. The "data"-array must contain two elements
+whereas the "attributes"-field of the second element is only checked to be present, regardless of what type it is and what it contains.
 
 ## Appendix
 
