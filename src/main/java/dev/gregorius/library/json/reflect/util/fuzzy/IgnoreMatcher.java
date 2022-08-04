@@ -4,15 +4,18 @@ import com.google.gson.JsonElement;
 
 import java.util.function.Predicate;
 
-public class BooleanMatcher extends AbstractFuzzyMatcher {
+/**
+ * Pseudo matcher for ignore check
+ */
+public class IgnoreMatcher extends AbstractFuzzyMatcher {
 
     @Override
     public String getFuzzyTag() {
-        return "#boolean";
+        return "#ignore";
     }
 
     @Override
     public Predicate<JsonElement> getPredicate() {
-        return jsonElement -> jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isBoolean();
+        return value -> true;
     }
 }
