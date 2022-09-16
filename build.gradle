@@ -19,6 +19,7 @@ def gsonVersion = "2.9.0"
 def jmesPathVersion = "0.5.1"
 def hamcrestVersion = "2.2"
 def commonsLang3Version = "3.12.0"
+def httpclientVersion = "4.5.13"
 
 sourceCompatibility = JavaVersion.VERSION_17
 group = "dev.gregorius.library"
@@ -50,6 +51,7 @@ dependencies {
 
     // Util
     implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
+    implementation "org.apache.httpcomponents:httpclient:$httpclientVersion"
 }
 
 java {

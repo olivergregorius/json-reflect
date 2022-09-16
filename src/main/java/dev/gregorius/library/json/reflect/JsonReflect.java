@@ -12,7 +12,7 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -69,7 +69,7 @@ public class JsonReflect {
 
     private static RestTemplate buildRestTemplate(final String baseUrl) {
         final RestTemplate newRestTemplate = new RestTemplate();
-        newRestTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+        newRestTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(new HttpComponentsClientHttpRequestFactory()));
         newRestTemplate.setInterceptors(List.of(new LoggingInterceptor()));
         newRestTemplate.setErrorHandler(new NoopResponseErrorHandler());
         newRestTemplate.setMessageConverters(List.of(new StringHttpMessageConverter(UTF_8)));
